@@ -1,0 +1,66 @@
+--- git/sdl/sdlinput.cpp	2015-12-23 17:26:31.861323380 +0100
++++ git.new/sdl/sdlinput.cpp	2015-12-23 17:33:47.991192025 +0100
+@@ -254,11 +254,29 @@
+ 		keymaps.push_back(strpair_t("J00:B1",         "Joypad1 A"));
+ 		keymaps.push_back(strpair_t("J00:B2",         "Joypad1 B"));
+ 		keymaps.push_back(strpair_t("J00:B3",         "Joypad1 Y"));
++		keymaps.push_back(strpair_t("J00:B4",        "Joypad1 R"));
+ 
+ 		keymaps.push_back(strpair_t("J00:B6",         "Joypad1 L"));
+ 		keymaps.push_back(strpair_t("J00:B7",         "Joypad1 R"));
+ 		keymaps.push_back(strpair_t("J00:B8",         "Joypad1 Select"));
++		keymaps.push_back(strpair_t("J00:B9",         "Joypad1 Start"));
+ 		keymaps.push_back(strpair_t("J00:B11",        "Joypad1 Start"));
++		
++		keymaps.push_back(strpair_t("J01:Axis0",      "Joypad2 Axis Left/Right T=50%"));
++		keymaps.push_back(strpair_t("J01:Axis1",      "Joypad2 Axis Up/Down T=50%"));
++
++		keymaps.push_back(strpair_t("J01:B0",         "Joypad2 X"));
++		keymaps.push_back(strpair_t("J01:B1",         "Joypad2 A"));
++		keymaps.push_back(strpair_t("J01:B2",         "Joypad2 B"));
++		keymaps.push_back(strpair_t("J01:B3",         "Joypad2 Y"));
++		keymaps.push_back(strpair_t("J01:B4",        "Joypad2 R"));
++
++		keymaps.push_back(strpair_t("J01:B6",         "Joypad2 L"));
++		keymaps.push_back(strpair_t("J01:B7",         "Joypad2 R"));
++		keymaps.push_back(strpair_t("J01:B8",         "Joypad2 Select"));
++		keymaps.push_back(strpair_t("J01:B9",         "Joypad2 Start"));
++		keymaps.push_back(strpair_t("J01:B11",        "Joypad2 Start"));
++		
+ 		keymaps.push_back(strpair_t("K00:SDLK_RIGHT",        "Joypad1 Right"));
+ 		keymaps.push_back(strpair_t("K00:SDLK_LEFT",         "Joypad1 Left"));
+ 		keymaps.push_back(strpair_t("K00:SDLK_DOWN",         "Joypad1 Down"));
+@@ -273,11 +291,30 @@
+ 		keymaps.push_back(strpair_t("K00:SDLK_z",            "Joypad1 R"));
+ 
+ 		// domaemon: *) GetSDLKeyFromName().
+-		name_sdlkeysym["SDLK_s"] = SDLK_s;
++		name_sdlkeysym["SDLK_a"] = SDLK_a;
++		name_sdlkeysym["SDLK_b"] = SDLK_b;
++		name_sdlkeysym["SDLK_c"] = SDLK_c;
+ 		name_sdlkeysym["SDLK_d"] = SDLK_d;
++		name_sdlkeysym["SDLK_f"] = SDLK_f;
++		name_sdlkeysym["SDLK_g"] = SDLK_g;
++		name_sdlkeysym["SDLK_h"] = SDLK_h;
++		name_sdlkeysym["SDLK_i"] = SDLK_i;
++		name_sdlkeysym["SDLK_j"] = SDLK_j;
++		name_sdlkeysym["SDLK_k"] = SDLK_k;
++		name_sdlkeysym["SDLK_l"] = SDLK_l;
++		name_sdlkeysym["SDLK_m"] = SDLK_m;
++		name_sdlkeysym["SDLK_n"] = SDLK_n;
++		name_sdlkeysym["SDLK_o"] = SDLK_o;
++		name_sdlkeysym["SDLK_p"] = SDLK_p;
++		name_sdlkeysym["SDLK_q"] = SDLK_q;
++		name_sdlkeysym["SDLK_r"] = SDLK_r;
++		name_sdlkeysym["SDLK_s"] = SDLK_s;
++		name_sdlkeysym["SDLK_t"] = SDLK_t;
++		name_sdlkeysym["SDLK_u"] = SDLK_u;
++		name_sdlkeysym["SDLK_v"] = SDLK_v;
++		name_sdlkeysym["SDLK_w"] = SDLK_w;
+ 		name_sdlkeysym["SDLK_x"] = SDLK_x;
+-		name_sdlkeysym["SDLK_c"] = SDLK_c;
+-		name_sdlkeysym["SDLK_a"] = SDLK_a;
++		name_sdlkeysym["SDLK_y"] = SDLK_y;
+ 		name_sdlkeysym["SDLK_z"] = SDLK_z;
+ 		name_sdlkeysym["SDLK_UP"] = SDLK_UP;
+ 		name_sdlkeysym["SDLK_DOWN"] = SDLK_DOWN;

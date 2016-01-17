@@ -1,0 +1,12 @@
+diff -Nur stella-3.9.3.old/src/emucore/Settings.cxx stella-3.9.3/src/emucore/Settings.cxx
+--- stella-3.9.3.old/src/emucore/Settings.cxx	2014-01-18 00:34:03.000000000 +0100
++++ stella-3.9.3/src/emucore/Settings.cxx	2015-12-18 00:00:56.422335346 +0100
+@@ -79,7 +79,7 @@
+   // Sound options
+   setInternal("sound", "true");
+   setInternal("fragsize", "512");
+-  setInternal("freq", "31400");
++  setInternal("freq", "48000");
+   setInternal("volume", "100");
+ 
+   // Input event options

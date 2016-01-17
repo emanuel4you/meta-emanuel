@@ -1,0 +1,34 @@
+#!/bin/sh
+
+EMU=${1}
+ROM=${2}
+NAME=`basename ${0}`
+LOG_FILE_VICE=""
+LOG_FILE=/var/log/${NAME}.log
+
+# set DEBUG="1" to debug
+DEBUG="1"
+
+if [ "${DEBUG}" != "0" ];
+then
+	LOG_FILE_VICE=" -logfile /var/log/vice-${EMU}.log -verbose"
+	echo "*** ${NAME} `date` ***" > ${LOG_FILE}; cat /proc/bus/input/devices >> ${LOG_FILE}; cat $0 >> ${LOG_FILE}; set -x; exec >> ${LOG_FILE} 2>&1
+fi
+
+export DISPLAY=:0
+export TERM="linux"
+export HOME="/root"
+export SDL_VIDEO_YUV_DIRECT=1
+export SDL_VIDEODRIVER="fbcon"
+export SDL_AUDIODRIVER="alsa"
+export SDL_NOMOUSE=1
+export SDL_DEBUG=${DEBUG}
+
+if [ "${ROM}" != "" ];
+then
+	/usr/bin/${EMU} -sounddev alsa -sdlbitdepth 16 -VICIIfull -VICIIdscan${LOG_FILE_VICE} -autoload "${ROM}"
+else
+	/usr/bin/${EMU} -sounddev alsa -sdlbitdepth 16 -VICIIfull -VICIIdscan${LOG_FILE_VICE}
+fi
+
+exit 0

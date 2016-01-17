@@ -1,0 +1,19 @@
+diff -Nur git.original/sdl/sdlinput.cpp git/sdl/sdlinput.cpp
+--- git.original/sdl/sdlinput.cpp	2015-12-13 18:18:58.000000000 +0100
++++ git/sdl/sdlinput.cpp	2015-12-13 18:20:33.240377425 +0100
+@@ -337,6 +337,7 @@
+ 		switch (event.type) {
+ 		case SDL_KEYDOWN:
+ 		case SDL_KEYUP:
++			printf (">>>> S9xReportButton SDL_KEY %d\n", event.key.keysym.sym);
+ 			// domaemon: not sure it's the best idea, but reserving the SDLK_q for quit.
+ 			if (event.key.keysym.sym == SDLK_q)
+ 			{
+@@ -354,6 +355,7 @@
+ #if 1
+ 		case SDL_JOYBUTTONDOWN:
+ 		case SDL_JOYBUTTONUP:
++			printf (">>>> S9xReportButton SDL_JOY %d\n", event.jbutton.button);
+ 			S9xReportButton(0x80000000 | // joystick button
+ 					(event.jbutton.which << 24) | // joystick index
+ 					event.jbutton.button, // joystick button code

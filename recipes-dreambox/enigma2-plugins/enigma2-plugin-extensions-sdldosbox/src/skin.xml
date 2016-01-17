@@ -1,0 +1,12 @@
+<skin>
+	<screen name="DosBox" position="0,0" size="0,0" title="DosBox" >
+	</screen>
+	
+	<screen name="DosBoxSummary" position="0,0" size="132,64" id="1">
+		<widget source="parent.title" render="Label" position="0,0" size="132,32" font="Regular;14" halign="center" valign="center"/>
+	</screen> 
+	<!-- Color OLED screen (menus) -->
+	<screen name="DosBoxSummary" position="0,0" size="96,64" id="2">
+		<widget source="parent.title" render="Label" position="0,0" size="96,32" font="Regular;11" halign="center" valign="center"/>
+	</screen>
+</skin>
