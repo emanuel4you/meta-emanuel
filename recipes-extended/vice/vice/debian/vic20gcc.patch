@@ -1,0 +1,32 @@
+--- ./vic20mem.c.orig	Tue Nov 13 23:14:58 2001
++++ ./vic20mem.c	Mon Feb 11 19:50:28 2002
+@@ -411,6 +411,14 @@
+     else
+         vic20_mem_disable_ram_block(0);
+ 
++    /* Setup color memory at $9400-$97FF.
++       Warning: we use a kludge here.  Instead of mapping the color memory
++       separately, we map it directly in the corresponding RAM address
++       space. */
++    set_mem(0x94, 0x97,
++            ram_read, ram_store,
++            ram, 0xffff);
++
+     /* Setup RAM or cartridge ROM at $2000-$3FFF.  */
+     if (mem_rom_blocks & (VIC_ROM_BLK1A | VIC_ROM_BLK1B)) {
+         vic20_mem_enable_rom_block(1);
+@@ -465,14 +473,6 @@
+     set_mem(0x91, 0x93,
+             via_read, via_store,
+             NULL, 0);
+-
+-    /* Setup color memory at $9400-$97FF.
+-       Warning: we use a kludge here.  Instead of mapping the color memory
+-       separately, we map it directly in the corresponding RAM address
+-       space. */
+-    set_mem(0x94, 0x97,
+-            ram_read, ram_store,
+-            ram, 0xffff);
+ 
+     /* Setup I/O2 at the expansion port */
+     set_mem(0x98, 0x9b,

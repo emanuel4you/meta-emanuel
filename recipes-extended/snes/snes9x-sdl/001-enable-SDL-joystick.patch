@@ -1,0 +1,12 @@
+diff -Nur git.original/sdl/sdlinput.cpp git/sdl/sdlinput.cpp
+--- git.original/sdl/sdlinput.cpp	2015-12-13 15:50:40.000000000 +0100
++++ git/sdl/sdlinput.cpp	2015-12-13 15:59:56.753780736 +0100
+@@ -351,7 +351,7 @@
+ 			break;
+ 
+ /***** Joystick starts *****/
+-#if 0
++#if 1
+ 		case SDL_JOYBUTTONDOWN:
+ 		case SDL_JOYBUTTONUP:
+ 			S9xReportButton(0x80000000 | // joystick button

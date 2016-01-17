@@ -1,0 +1,15 @@
+<Myxie> The upstream people have moved to automake. They supply Makefile.in but this gets redone by automake... differently. So I have diffs of Makefile.in throughout the .diif.gz What can I do?
+<dark> Myxie: Weep, curse the gods.
+<dark> Myxie: Or, refrain from running automake in your rules file :)  That's what I do with lesstif.
+* Myxie sez oh dear.
+<Myxie> Who said I ran automake?
+<dark> Myxie: It works if you can hack the package without touching its Makefile.ams.
+<Myxie> (as ooposed to the upstream Makefiles.
+<dark> Myxie: Well something does.  Is the upstream makefile responding to timestamps perhaps?
+<dark> Myxie: Or does it run automake unconditionally?
+<Myxie> dark: I will check
+<netgod> Myxie:  clean: rm -f $$(find . -name Makefile.in)?
+<dark> netgod: That's cheating :)
+<Myxie> ng: then I have diffs full of "-"
+<dark> Myxie: No, dpkg-source ignores deletions IIRC.
+<Myxie> dark: oh good

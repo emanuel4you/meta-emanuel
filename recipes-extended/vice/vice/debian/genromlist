@@ -1,0 +1,15 @@
+#!/bin/sh
+#
+# Searches for unredistributable ROM files
+
+# This command will actually miss a couple files ('file' is imperfect)
+# ROMLIST=`find data -type f -exec file {} \; | grep ": data" | grep -v PRINTER | grep -v Makefile | cut -f 1 -d ':'`
+
+ROMLIST=`find data -type f -exec file {} \; | grep -v text | grep -v empty | grep -v \.fon | cut -f 1 -d ':'`
+
+if [ X"$ROMLIST" = "X" ] ; then
+    exit 0 ;
+else 
+    echo $ROMLIST ;
+    exit 1;
+fi

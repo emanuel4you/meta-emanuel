@@ -1,0 +1,393 @@
+#!/bin/bash
+
+# This script is Copyright 1997-1999 by Giuliano P Procida
+# It is released under the GNU GPL (version 2 or later).
+
+# Changelog at end.
+
+set -e
+
+usage () {
+    echo Run this script as $0 [dir]. The optional argument dir
+    echo defaults to \"~/vice-getroms-tmp\" .
+    echo
+    echo This script attempts to download the various ROM images for
+    echo the VICE emulators. The system administrator may choose to
+    echo install the images for all to use. Individual users may do so
+    echo for their own use, if the images are not installed by root.
+}
+
+declare -a FTPHOST
+declare -a FTPFILE
+declare LOCATIONS
+
+setup_locations () {
+    local site
+    local file
+    local rubbish
+    LOCATIONS=0
+    while read host file rubbish; do
+	FTPHOST[$LOCATION]="$host"
+	FTPFILE[$LOCATION]="$file"
+	LOCATIONS=$[1+$LOCATIONS]
+    done <<EOF
+ftp.zimmers.net /pub/cbm/crossplatform/emulators/VICE/old/vice-1.5-roms.tar.gz
+EOF
+}
+
+yesno () {
+    local response
+    while true; do
+	echo -n "$@" "[y] "
+	read response </dev/tty
+	case $response in
+	    y*|Y*|"") return 0 ;;
+	    n*|N*) return 1 ;;
+	    *) echo Please respond with y or n.
+	esac
+    done
+}
+
+noyes () {
+    local response
+    while true; do
+	echo -n "$@" "[n] "
+	read response </dev/tty
+	case $response in
+	    y*|Y*) return 0 ;;
+	    n*|N*|"") return 1 ;;
+	    *) echo Please respond with y or n.
+	esac
+    done
+}
+
+die () {
+    echo "$0: $1"
+    exit 1
+}
+
+getmethods () {
+    for i in wget lynx ftp; do
+	METHOD="`which $i`" || true
+	if [ -n "$METHOD" ]; then
+	    return 0
+	fi
+    done
+    return 1
+}
+
+md5check () {
+    case `md5sum "$1" | sed s,[[:space:]].*$,,` in
+	57af4ae21d4b705c2991d98ed5c1f7b8) echo "C64/basic";;
+	12a4202f5331d45af846af6c58fba946) echo "C64/chargen";;
+	39065497630802346bce17963f13c092) echo "C64/kernal";;
+
+	e929eee180f24415fbee1c4d71d29675) echo "C128/basic";;
+	637b0d14902620b6bb1f945fd3b2cb76) echo "C128/chargen";;
+	03ab64f095184edd9d10e3d12354a10a) echo "C128/kernal";;
+
+	8b9237706f47a9b3498d8f881ef0244d) echo "VIC20/basic";;
+	d390e340e94e1bef0f2fdfe9fa850993) echo "VIC20/chargen";;
+	f0587624dcd7685710a8fdb35939617f) echo "VIC20/kernal";;
+
+	f328e785835907006604423222db7bbf) echo "PET/basic1";;
+	b69739387bebe999227ae0cf25aa1e91) echo "PET/basic2";;
+	d22d2a1912a0cdbd9e7c8b103541b2c6) echo "PET/basic4";;
+	61b7e2fd04d63b0702951ba40899cd72) echo "PET/kernal1";;
+	51a38bfef8f9e72cb64bf7d874b4c8c6) echo "PET/kernal2";;
+	16ec21443ea5431ab63d511061054e6f) echo "PET/kernal4";;
+	ef9bd0e62dfc47eb463fef20d0344826) echo "PET/edit1g";;
+	cb8e8404c0b28eda10469792dfd1dbc2) echo "PET/edit2g";;
+	7f87889ca7ee2537f0c1993d35d0fb18) echo "PET/edit2b";;
+	b76d756e7ac8752ae0035f3ce5f1383c) echo "PET/edit4g40";;
+	a09d11163a708b8dea90f1c5df33dca0) echo "PET/edit4b40";;
+	3a0e2ef328040aa30b30a8134426879a) echo "PET/edit4b80";;
+	9880432e633b15998d58884ff34c4e70) echo "PET/chargen";;
+	f099504e32bec9e1e81b6d2600b15277) echo "PET/chargen.de";;
+
+	3ad5c7182006bcad1597583dbc8505c9) echo "CBM-II/basic.128";;
+	cc2789132e50674af0e7207e3a1dae97) echo "CBM-II/basic.256";;
+	2818722af27ceae6952c08cf83a076f9) echo "CBM-II/chargen.600";;
+	03f32477905d77e2135857076ec31efa) echo "CBM-II/chargen.700";;
+	e0346953e77bd1353ebf53aaa5b6f0b0) echo "CBM-II/kernal";;
+
+	ada295382a1f2df772a7e5c5c6f34215) echo "DRIVES/dos1541";;
+	# ada295382a1f2df772a7e5c5c6f34215) echo "DRIVES/dos1541II";;
+	dae964d64b7843ff86c008d396dda208) echo "DRIVES/dos1571";;
+	6a82f92aea2a3afa190fe32d565f39e7) echo "DRIVES/dos1581";;
+	3454c06fd2275f5bcbfe936dcdf8059b) echo "DRIVES/dos2031";;
+
+	d41d8cd98f00b204e9800998ecf8427e) echo "empty";;
+	f02e326f800ee26f04df7961adbf7c0a) echo "dummy";;
+	*)                                echo "unknown";;
+    esac
+}
+
+show () {
+    local dir
+    dir="$1"
+    ( cd "$dir"
+#      find -type f -not -name "*.distrib" | ( while read name; do echo -n "${name}"; echo -ne ":\t"; md5check "$name"; done )
+      find -type f -not -name "*.vkm" -not -name "*.vpl" -not -name "*.vrs" | ( while read name; do echo -n "${name}"; echo -ne ":\t"; md5check "$name"; done )
+    )
+}
+
+showcurrent () {
+    if [ -d "$INSTALLDIR" ]; then
+	echo Currently installed images in $INSTALLDIR:
+	show "$INSTALLDIR"
+    fi
+}
+
+shownew () {
+    echo Images available in $BASE:
+    show "$BASE"
+}
+
+unpackarchive () {
+    while true; do
+	case "`file rom-images`" in
+	    *compressed*) zcat rom-images > rom-images.tmp && \
+			  mv rom-images.tmp rom-images || return 1 ;;
+	    *tar*)        tar xf rom-images; return ;;
+	    *zip*)        unzip rom-images; return ;;
+	    *)            echo unrecognised archive; return 1
+	esac
+    done
+}
+
+getarchive () {
+    local index
+    index=0
+    while [ $index -lt $LOCATIONS ]; do
+	echo $index ${FTPHOST[$index]} ${FTPFILE[$index]}
+	index=$[1+$index]
+    done
+
+    echo 'Please notify <myxie@debian.org> of any other locations!'
+    echo -n "Please select a number of ftp sites (by number and in order of preference): "
+    local sites
+    read -a sites
+
+    local pass
+    pass="`whoami`@`hostname -f`"
+
+    index=0
+    local host
+    local file
+    while [ -n "${sites[$index]}" ]; do
+	host=${FTPHOST[${sites[$index]}]}
+	file=${FTPFILE[${sites[$index]}]}
+	echo trying: $host $file
+	case $METHOD in
+	    *wget) $METHOD -q -O - ftp://${host}${file} >rom-images || true ;;
+	    *lynx) $METHOD -dump ftp://${host}${file} >rom-images 2>/dev/null || true ;;
+	    *ftp)  ( $METHOD -n || true ) <<EOF ;;
+open $host
+user anonymous $pass
+bin
+get  $file rom-images
+quit
+EOF
+	    *) die "bad method"
+	esac
+	if [ -s rom-images ] && unpackarchive; then
+	    rm rom-images
+	    return 0
+	fi
+	index=$[1+$index]
+    done
+
+    return 1
+}
+
+installrom () {
+#    if [ "`whoami`" = root ]; then
+#	if [ ! -e $2.distrib ]; then
+#	    dpkg-divert --add --rename $2 || die "could not divert file: $2"
+#	fi
+#    fi
+    rm -fr "$2"
+    mkdir -p "$2" && rmdir "$2"	|| die "could not clear way for file: $2"
+    echo "installing: $1 (as $2)"
+    cp "$1" "$2"		|| die "could not install file: $2"
+    chmod 644 "$2"		|| die "could not change mode of file: $2"
+}
+
+installroms () {
+    local ask
+    ask=0
+    yesno "Would you like to install all recognised ROM images in $INSTALLDIR? Answer n to select only some." || ask=1
+    find -type f | (
+	local=md
+	md=""
+	# hackery to iterate through an extra value
+	while { [ "$md" = DRIVES/dos1541 ] && md=DRIVES/dos1541II; } || \
+	      { read name && md=`md5check "$name"`; } ; do
+	    case "$md" in
+		*/*) if [ -e "$INSTALLDIR/$md" ] && cmp -s "$name" "$INSTALLDIR/$md"; then
+			echo "skipping: $name (already installed as $md)"
+		    else
+			if [ $ask -eq 0 ] || yesno "install $name as $INSTALLDIR/$md ?"; then
+			    installrom "$name" "$INSTALLDIR/$md"
+			fi
+		    fi ;;
+		dummy)   echo "skipping: $name (a dummy ROM image)" ;;
+		unknown) echo "skipping: $name (unrecognised)" ;;
+		empty)   echo "skipping: $name (empty)" ;;
+	    esac
+	done
+    )
+}
+
+removerom () {
+#    if [ "`whoami`" = root ]; then
+#	if [ -e "$1.distrib" ]; then
+#	    rm "$1"                            || die "could not remove file: $1"
+#	    dpkg-divert --remove --rename "$1" || die "could not undivert file: $1"
+#	else
+#	    echo "Bad dummy ROM image $2, contact maintainer"
+#	fi
+#    else
+	echo deleting: $1
+	rm "$1" || die "could not delete $1"
+#    fi
+}
+
+removeroms () {
+    noyes "Would you like to remove any ROM images from $INSTALLDIR?" || return 0
+    local ask
+    ask=0
+    noyes "Would you like to remove all recognised ROM images from $INSTALLDIR? Answer n to select only some." || ask=1
+    find $INSTALLDIR -type f -not -name "*.vkm" -not -name "*.vpl" -not -name "*.vrs" | (
+	local=md
+	while read name; do
+#	    if [ "${name:${#name}-8}" = ".distrib" ]; then continue; fi
+	    md=`md5check "$name"`
+	    case "$md" in
+		*/*)    if [ $ask -eq 0 ] || noyes "delete $name ?"; then
+			    removerom "$name"
+			fi ;;
+		dummy)   echo "skipping: $name (a dummy ROM image)" ;;
+		unknown) echo "skipping: $name (unrecognised)" ;;
+		empty)   echo "skipping: $name (empty)" ;;
+	    esac
+	done
+    )
+}
+
+# program start
+
+case $# in
+    0) BASE="$HOME/vice-getroms-tmp" ;;
+    1) case "$1" in
+	   -h|-?|--help) usage
+		         exit 0 ;;
+	   *) BASE="$1" ;;
+       esac ;;
+    *) usage
+       exit 1 ;;
+esac
+
+setup_locations
+
+INSTALLDIR=$HOME/lib/vice
+if [ "`whoami`" = root ]; then
+    INSTALLDIR=/usr/lib/vice
+fi
+
+showcurrent
+
+if [ -d $INSTALLDIR ]; then
+    removeroms
+#    ( find $INSTALLDIR -type d -empty | xargs -i rmdir "{}" ) || true
+fi
+
+if yesno "Would you like to try and install some ROM images?"; then
+
+    if [ -d "$BASE" ]; then
+	if yesno "May I delete and re-create the directory \"$BASE\" ?"; then
+	    rm -fr -- "$BASE" || die "Could not delete directory $BASE"
+	    mkdir -- "$BASE" || die "Could not create directory $BASE"
+	else
+	    die "aborting"
+	fi
+    else
+	if [ -e "$BASE" ]; then
+	    die "$BASE exists and is not a directory"
+	fi
+	if yesno "May I create the directory \"$BASE\" ?"; then
+	    mkdir -p -- "$BASE" || die "Could not create directory $BASE"
+	else
+	    die "aborting"
+	fi
+    fi
+
+    cd "$BASE" || die "Could not change directory to $BASE."
+
+    echo Using temporary directory: $BASE
+
+    getmethods || die "Could not find a means of downloading images.\nTry installing wget, lynx or ftp (netstd)."
+
+    echo Using "$METHOD" to download files
+
+    getarchive || die "Could not download the ROM images."
+
+    shownew
+
+    if [ "`whoami`" != root ]; then
+	if [ ! -d "$INSTALLDIR" ]; then
+	    if [ -e "$INSTALLDIR" ]; then
+		die "$INSTALLDIR exists and is not a directory"
+	    fi
+	    if yesno "May I create the directory \"$INSTALLDIR\" ?"; then
+		mkdir -p -- "$INSTALLDIR" || die "Could not create directory $INSTALLDIR"
+	    else
+		die "aborting"
+	    fi
+	fi
+    fi
+    
+    installroms
+
+    cd -
+
+    if yesno "Remove temporary directory $BASE ?"; then
+	rm -fr $BASE
+    fi
+
+fi
+
+echo Finished.
+
+if [ "`whoami`" != root -a -d "$INSTALLDIR" -a ! -f "$HOME/.vicerc" ]; then
+    echo You will have to create a $HOME/.vicerc file to make use of
+    echo any images stored under $INSTALLDIR. Please consult the
+    echo VICE documentation for information on how to achieve this.
+fi
+
+exit 0
+
+# Changelog.
+# Some older history is in the Debian changelog for VICE.
+
+# Version 1.1
+# * Fixed INSTALDIR vs BASEDIR typo (remove and recreate message).
+# * Disabled diversion code and stopped rmdir of empty dirs.
+# * Added more md5sums; tweaked and debugged dos1541 handling.
+# -- Giuliano Procida <myxie@debian.org> Wed, 26 Aug 1998 21:40:13 +0100
+
+# Version 1.2
+# * Updated (massacred) list of ROM locations in vice-getroms.
+# * Adjusted rules and vice-getroms for new ROMs and file names.
+# * The ROM locations array is now created from a here document.
+# -- Giuliano P Procida <myxie@debian.org>  Wed, 12 May 1999 14:51:26 +0100
+
+# Version 1.2.1
+# * Trivial change to vice-getroms usage message.
+# -- Giuliano P Procida <myxie@debian.org>  Tue, 18 May 1999 21:07:19 +0100
+
+# Notes.
+# Probably need to have a list of valid ROM names (RHS of md5sum table)
+# to avoid all the skipping messages. <- I've forgotten what this means!
+# Need to reinstate md5sums of obsolete images so that they can be removed.

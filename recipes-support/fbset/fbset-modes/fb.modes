@@ -1,0 +1,90 @@
+
+mode "1920x1080 20Hz 16bit"
+	# D: 50.000 MHz, H: 23.674 kHz, V: 20.658 Hz
+	geometry 1920 1080 1920 1080 16
+	timings 20000 64 64 32 32 64 2
+	accel false
+	rgba 5/0,6/5,5/11,0/0
+endmode
+
+
+mode "1024x768 72Hz 16bit"
+	# D: 74.996 MHz, H: 58.227 kHz, V: 72.242 Hz
+	geometry 1024 768 1024 768 16
+	timings 13334 104 24 29 3 136 6
+	accel false
+	rgba 5/0,6/5,5/11,0/0
+endmode
+
+
+mode "1024x720 52Hz 16bit"
+	# D: 50.000 MHz, H: 41.118 kHz, V: 52.314 Hz
+	geometry 1024 720 1024 720 16
+	timings 20000 64 64 32 32 64 2
+	accel false
+	rgba 5/0,6/5,5/11,0/0
+endmode
+
+
+mode "768x576 75Hz 16bit"
+	# D: 49.188 MHz, H: 46.580 kHz, V: 75.008 Hz
+	geometry 768 576 768 576 16
+	timings 20330 128 32 32 8 128 5
+	accel false
+	rgba 5/0,6/5,5/11,0/0
+endmode
+
+
+mode "720x576 85Hz 16bit"
+	# D: 50.000 MHz, H: 54.825 kHz, V: 85.397 Hz
+	geometry 720 576 720 576 16
+	timings 20000 64 64 32 32 64 2
+	accel false
+	rgba 5/0,6/5,5/11,0/0
+endmode
+
+
+mode "720x576-2"
+	# D: 32.043 MHz, H: 31.049 kHz, V: 49.999 Hz
+	geometry 720 576 720 576 16
+	timings 31208 144 40 32 10 128 3
+	accel false
+	rgba 5/0,6/5,5/11,0/0
+endmode
+
+
+mode "640x480 75Hz 16bit"
+	# D: 31.499 MHz, H: 37.499 kHz, V: 74.998 Hz
+	geometry 640 480 640 480 16
+	timings 31747 120 16 16 1 64 3
+	accel false
+	rgba 5/0,6/5,5/11,0/0
+endmode
+
+
+mode "640x400 92Hz 16bit"
+	# D: 35.371 MHz, H: 41.711 kHz, V: 92.485 Hz
+	geometry 640 400 640 400 16
+	timings 28272 48 32 17 22 128 12
+	accel false
+	rgba 5/0,6/5,5/11,0/0
+endmode
+
+
+mode "320x240 170Hz 16bit"
+	# D: 19.462 MHz, H: 45.050 kHz, V: 170.001 Hz
+	geometry 320 240 320 240 16
+	timings 51383 32 32 20 4 48 1
+	accel false
+	rgba 5/0,6/5,5/11,0/0
+endmode
+
+
+mode "320x200 170Hz 16bit"
+	# D: 16.545 MHz, H: 38.299 kHz, V: 170.219 Hz
+	geometry 320 200 320 200 16
+	timings 60440 32 32 20 4 48 1
+	accel false
+	rgba 5/0,6/5,5/11,0/0
+endmode
+
