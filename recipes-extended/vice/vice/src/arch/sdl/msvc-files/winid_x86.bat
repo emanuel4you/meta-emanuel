@@ -1,1 +1,0 @@
-set WIN64TYPE=win32

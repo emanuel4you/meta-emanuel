@@ -1,4 +1,0 @@
-correct_html_documentation_path_in_manpage.patch
-kfreebsd_no_machine_cpufunc.h.patch
-revert_upstream_lib64.patch
-try-to-fix-possible-race-condition.patch

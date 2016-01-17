@@ -1,9 +1,0 @@
-#!/bin/sh
-set -f
-"$@"
-status=$?
-if [ $status -ne 0 ]; then
-  echo -n "Command returned exit status: $status; press <ENTER> to continue."
-  read
-fi
-exit $status
