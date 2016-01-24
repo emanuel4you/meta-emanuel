@@ -603,13 +603,33 @@ diff -Nur a/src/video/fbcon/SDL_fbevents.c b/src/video/fbcon/SDL_fbevents.c
  		}
  	} while ( posted );
  }
-@@ -1252,3 +1721,157 @@
+@@ -1252,3 +1721,177 @@
  	}
  	return(keysym);
  }
 +
 +static SDLKey SDLKeyTranslate(unsigned short code, int type) {
-+
++	
++	if (type == 1) {
++		switch (code) {
++			case KEY_F1:		return SDLK_CARET;
++			case KEY_F2:		return SDLK_F1;
++			case KEY_F3:		return SDLK_F2;
++			case KEY_BACK:		return SDLK_F3;
++			case KEY_FORWARD:	return SDLK_F4;
++			case KEY_F6:		return SDLK_F5;
++			case KEY_F7:		return SDLK_F6;
++			case KEY_F8:		return SDLK_F7;
++			case KEY_RECORD:	return SDLK_F8;
++			case KEY_STOP:		return SDLK_F9;
++			case KEY_PAUSE:		return SDLK_F10;
++			case KEY_PREVIOUSSONG:	return SDLK_F11;
++			case KEY_PLAY:		return SDLK_F12;
++			case KEY_FASTFORWARD:	return SDLK_SYSREQ;;
++			case KEY_NEXTSONG:	return SDLK_PAUSE;
++		}
++	}
++	
 +	switch (code) {
 +		case KEY_0:		return SDLK_0;
 +		case KEY_1:		return SDLK_1;
