@@ -4,7 +4,8 @@ RDEPENDS_${PN} = "libsdl alsa-lib ncurses-terminfo zlib expat"
 SECTION = "emulators"
 PRIORITY = "optional"
 DEPENDS = "virtual/libsdl"
-INC_PR = "r1"
+HOMEPAGE = "http://www.advancemame.it"
+PR = "r1"
 
 SRC_URI = "${SOURCEFORGE_MIRROR}/advancemame/advancemame-${PV}.tar.gz \
            file://remove-obsolete-configure-ac-settings.patch \		
