@@ -1,4 +1,4 @@
-PR = "r3"
+PR = "r4"
 
 SRC_URI += "file://linux-input.patch \
           "
