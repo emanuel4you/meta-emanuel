@@ -45,7 +45,7 @@ class Vice(Screen, ServiceStopScreen):
 		com = "export LANG=" + language.getLanguage() + ".UTF-8;"
 		com += "/usr/bin/vice-start '%s'" %self.__emu
 		if self.__rom != "":
-			com += " %s" %self.__rom
+			com += " '%s'" %self.__rom
 		self.__container.execute(com)
 
 	def __runFinished(self,retval):
