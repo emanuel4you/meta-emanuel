@@ -9,7 +9,7 @@ device_color_bgr24 no
 device_color_bgr32 no
 device_color_bgr8 no
 device_color_palette8 no
-device_color_yuy2 no
+device_color_yuy2 yes
 device_joystick auto
 device_keyboard auto
 device_mouse auto
@@ -50,11 +50,11 @@ display_artwork_backdrop yes
 display_artwork_bezel no
 display_artwork_crop yes
 display_artwork_overlay yes
-display_aspectx 16
-display_aspecty 9
+display_aspectx 4
+display_aspecty 3
 display_beam 1
 display_brightness 1
-display_buffer yes
+display_buffer no
 display_color auto
 display_expand 1
 display_flicker 0
@@ -64,13 +64,12 @@ display_frameskip auto
 display_gamma 1
 display_intensity 1.5
 display_interlaceeffect none
-display_magnify 1
+display_magnify auto
 display_magnifysize 640
-#display_mode sdl
-display_mode sdl_640x480
+display_mode auto
 display_pausebrightness 1
 display_resize fractional
-display_resizeeffect none
+display_resizeeffect auto
 display_restore yes
 display_rgbeffect none
 display_rol no
@@ -262,6 +261,7 @@ script_event6
 script_event7 
 script_event8 
 script_event9 
+script_knocker on(kdb, 0b100); wait(!event()); off(kdb, 0b100);
 script_led1 on(kdb, 0b1); wait(!event()); off(kdb, 0b1);
 script_led2 on(kdb, 0b10); wait(!event()); off(kdb, 0b10);
 script_led3 
@@ -300,14 +300,15 @@ ui_font auto
 ui_fontsize auto
 ui_helpimage auto
 ui_translucency 0.8
-outrun/display_vsync no
-outrun/sound_mode mono
-outrun/sound_adjust 5
-outrun/sound_normalize no
-outrun/sound_samplerate 22050
-outrun/display_mode sdl_640x400
-outrun/display_frameskip 0.5
 phoenix/sound_mode mono
 phoenix/sound_samplerate 22050
-phoenix/display_frameskip 0.5
+phoenix/display_frameskip 0.3
 phoenix/display_mode sdl_640x400
+outrun/sound_latency 0.01
+320x224/display_mode sdl_640x480
+320x224/display_resizeeffect none
+320x224/display_resize integer
+320x224/display_vsync no
+outrun/sound_mode mono
+outrun/sound_adjust 4
+outrun/sound_normalize no

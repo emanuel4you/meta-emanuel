@@ -8,7 +8,7 @@ PACKAGE_ARCH = "mips32el"
 SOURCE = "https://github.com/emanuel4you/meta-emanuel"
 
 PV = "0.1"
-PR = "r1"
+PR = "r2"
 PN = "enigma2-plugin-extensions-sdlmame"
 
 RDEPENDS_${PN} += "advancemame \
