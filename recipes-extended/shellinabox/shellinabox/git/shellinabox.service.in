@@ -1,0 +1,11 @@
+[Unit]
+Description=shellinabox is a web based terminal that uses Ajax technology to provide the look and feel of a native shell.
+After=network.target nss-lookup.target
+
+[Service]
+EnvironmentFile=-/etc/default/shellinaboxd
+ExecStart=/usr/bin/shellinaboxd -u $SHELLINABOX_USER -g $SHELLINABOX_GROUP -c $SHELLINABOX_CRETDIR -p $SHELLINABOX_PORT $SHELLINABOX_OPTS
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,24 @@
+# default for shellinaboxd
+#
+# shellinabox is a web based terminal that uses Ajax technology to provide the look and feel of a native shell.
+# see shellinaboxd --help
+# https://github.com/shellinabox/shellinabox/wiki
+#
+
+# TCP port webserver to listen on
+SHELLINABOX_PORT=4430
+
+#
+# directory for ssl cert
+SHELLINABOX_CRETDIR="/etc/shellinabox"
+
+# user login
+SHELLINABOX_USER="0"
+
+#
+# group login
+SHELLINABOX_GROUP="0"
+
+#
+# optins "no-beep" to fix vcl crash on x64 host
+SHELLINABOX_OPTS="--no-beep"
