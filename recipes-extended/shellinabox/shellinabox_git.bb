@@ -11,7 +11,6 @@ RDEPENDS_${PN} += "openssl"
 LIC_FILES_CHKSUM = "file://COPYING;md5=a193d25fdef283ddce530f6d67852fa5"
 LICENSE = "GPLv2"
 
-#SRCREV="2c93404bd0b2b3dac244b3664741603f9a619664"
 SRCREV="0c8c295c1af04f357eb60ab263822c45df5b1031"
 BRANCH="master"
 
@@ -36,7 +35,6 @@ SYSTEMD_SERVICE_${PN} = "shellinabox.service"
 do_install_append() {
 	install -d ${D}${systemd_unitdir}/system
 	install -c -m 644 ${S}/shellinabox.service.in ${D}${systemd_unitdir}/system/shellinabox.service
-	
 	install -d ${D}${sysconfdir}/default
 	install -c -m 644 ${S}/shellinaboxd.default ${D}${sysconfdir}/default/shellinaboxd
 }
