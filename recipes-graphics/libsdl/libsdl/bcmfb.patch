@@ -3523,7 +3523,7 @@ diff -Nur SDL-1.2.15/src/video/SDL_surface.c SDL-bcmfb-1.2.15/src/video/SDL_surf
 +	height = dst->h;
 +	stride = dst->w * bpp/8;
 +	
-+	if ((bpp != 8) || (bpp == 16) || (bpp == 32) || (stride < 48)) {
++	if ((bpp != 8) || (bpp != 16) || (bpp != 32) || (stride < 48)) {
 +		fprintf(stderr, "FillHWRect is no candidate for accel stride=%d bpp=%d\n", stride, bpp);
 +		return(0);
 +	}
