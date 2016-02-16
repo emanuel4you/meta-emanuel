@@ -1,7 +1,6 @@
 #!/bin/sh
 
-EXE="snes9x-sdl"
-ROM=$1
+EXE="advmenu"
 NAME=`basename ${0}`
 LOG_FILE=/var/log/${EXE}.log
 
@@ -20,21 +19,11 @@ export SDL_VIDEODRIVER="bcmfb"
 export SDL_BCMFB_ACCEL=0
 export SDL_AUDIODRIVER="alsa"
 export SDL_DEBUG=${DEBUG}
-export SDL_NOMOUSE=1
+
+#echo "U:720x576i-170" > /sys/class/graphics/fb0/mode
 
 fbset -depth 16
 
-if [ "${ROM}" != "" ];
-then
-	if [ "${DEBUG}" != "0" ];
-	then
-		/usr/bin/${EXE} -displaykeypress -v3 "${ROM}"
-	else
-		/usr/bin/${EXE} -v3 "${ROM}"
-	fi
-else
-	echo "${NAME}: no rom found! - exit"
-	exit 1
-fi
+/usr/bin/${EXE}
 
 exit 0

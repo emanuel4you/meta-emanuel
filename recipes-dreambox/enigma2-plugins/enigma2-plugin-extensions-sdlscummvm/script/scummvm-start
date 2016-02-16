@@ -13,15 +13,17 @@ then
 	echo "*** ${NAME} `date` ***" > ${LOG_FILE}; cat /proc/bus/input/devices >> ${LOG_FILE}; cat $0 >> ${LOG_FILE}; set -x; exec >> ${LOG_FILE} 2>&1
 fi
 
-export DISPLAY=:0
+export DISPLAY=0
 export TERM="linux"
 export HOME="/root"
-export SDL_VIDEO_YUV_DIRECT=1
-export SDL_VIDEODRIVER="fbcon"
+export SDL_BCMFB_ACCEL=0
+export SDL_VIDEODRIVER="bcmfb"
 export SDL_AUDIODRIVER="alsa"
 export SDL_DEBUG=${DEBUG}
 
-fbset "640x480 75Hz 16bit"
+echo "U:640x480i-149" > /sys/class/graphics/fb0/mode
+
+fbset -depth 16
 
 /usr/bin/${EXE}
 

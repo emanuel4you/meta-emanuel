@@ -13,15 +13,16 @@ then
 	echo "*** ${NAME} `date` ***" > ${LOG_FILE}; cat /proc/bus/input/devices >> ${LOG_FILE}; cat $0 >> ${LOG_FILE}; set -x; exec >> ${LOG_FILE} 2>&1
 fi
 
-export DISPLAY=:0
+export DISPLAY=0
 export TERM="linux"
 export HOME="/root"
-export SDL_VIDEO_YUV_DIRECT=1
-export SDL_VIDEODRIVER="fbcon"
+export SDL_VIDEODRIVER="bcmfb"
+export SDL_BCMFB_ACCEL=0
 export SDL_AUDIODRIVER="alsa"
 export SDL_DEBUG=${DEBUG}
+export SDL_NOMOUSE=1
 
-fbset "768x576 75Hz 16bit"
+fbset -depth 16
 
 if [ "${ROM}" != "" ];
 then

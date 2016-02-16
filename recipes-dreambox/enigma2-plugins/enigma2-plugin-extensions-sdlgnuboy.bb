@@ -8,11 +8,10 @@ PACKAGE_ARCH = "mips32el"
 SOURCE = "https://github.com/emanuel4you/meta-emanuel"
 
 PV = "0.1"
-PR = "r2"
+PR = "r3"
 PN = "enigma2-plugin-extensions-sdlgnuboy"
 
 RDEPENDS_${PN} += "gnuboy \
- fbset-modes (>= 0.1.0-r6.2) \
 "
 
 SRC_URI = "file://${PN}/*"
@@ -28,18 +27,6 @@ sbindir = "/usr/sbin"
 libdir = "/usr/lib"
 datadir = "/usr/share"
 
-#do_install_append_${PN}() {
-#}
-
-#pkg_postinst_${PN}() {
-#if [ -f /usr/bin/ginstall.py ]; then
-#	ginstall.py add '("Games", "1", "GnuBoy", "", "Plugins.Extensions.SDLGnuBoy.gnuboy", "GnuBoy", "", "/usr/lib/enigma2/python/Plugins/Extensions/SDLGnuBoy/icon_gnuboy.png", "", "")' path=/etc/enigma2/gemini_desktop.xml
-#fi
-#}
-
 pkg_postrm_${PN}() {
 rm -rf /usr/lib/enigma2/python/Plugins/Extensions/SDLGnuBoy
-#if [ -f /usr/bin/ginstall.py ]; then
-#	ginstall.py remove '("Games", "", "GnuBoy", "", "", "", "", "", "", "")' path=/etc/enigma2/gemini_desktop.xml
-#fi
 }

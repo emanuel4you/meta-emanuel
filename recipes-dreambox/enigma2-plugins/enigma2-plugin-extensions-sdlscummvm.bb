@@ -8,11 +8,10 @@ PACKAGE_ARCH = "mips32el"
 SOURCE = "https://github.com/emanuel4you/meta-emanuel"
 
 PV = "0.1"
-PR = "r1"
+PR = "r2"
 PN = "enigma2-plugin-extensions-sdlscummvm"
 
 RDEPENDS_${PN} += "scummvm \
- fbset-modes (>= 0.1.0-r6.2) \
 "
 
 SRC_URI = "file://${PN}/*"
@@ -28,18 +27,6 @@ sbindir = "/usr/sbin"
 libdir = "/usr/lib"
 datadir = "/usr/share"
 
-#do_install_append_${PN}() {
-#}
-
-#pkg_postinst_${PN}() {
-#if [ -f /usr/bin/ginstall.py ]; then
-#	ginstall.py add '("Games", "1", "C64", "", "Plugins.Extensions.SDLScummvm.scummvm", "Scummvm", "", "/usr/lib/enigma2/python/Plugins/Extensions/SDLScummvm/icon_x64.png", "", "")' path=/etc/enigma2/gemini_desktop.xml
-#fi
-#}
-
 pkg_postrm_${PN}() {
 rm -rf /usr/lib/enigma2/python/Plugins/Extensions/SDLScummvm
-#if [ -f /usr/bin/ginstall.py ]; then
-#	ginstall.py remove '("Games", "", "C64", "", "", "", "", "", "", "")' path=/etc/enigma2/gemini_desktop.xml
-#fi
 }

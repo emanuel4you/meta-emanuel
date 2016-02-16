@@ -8,11 +8,10 @@ PACKAGE_ARCH = "mips32el"
 SOURCE = "https://github.com/emanuel4you/meta-emanuel"
 
 PV = "0.1"
-PR = "r1"
+PR = "r2"
 PN = "enigma2-plugin-extensions-sdlstella"
 
 RDEPENDS_${PN} += "stella \
- fbset-modes (>= 0.1.0-r6.2) \
 "
 
 SRC_URI = "file://${PN}/*"
@@ -27,8 +26,6 @@ bindir = "/usr/bin"
 sbindir = "/usr/sbin"
 libdir = "/usr/lib"
 datadir = "/usr/share"
-
-
 
 pkg_postrm_${PN}() {
 rm -rf /usr/lib/enigma2/python/Plugins/Extensions/SDLStella
