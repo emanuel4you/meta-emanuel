@@ -9,10 +9,10 @@ SRCREV = "58d855e1939cb798bc94f8a21e404f17213e9e92"
 
 
 PV = "2.11.1+git${SRCPV}"
-PR = "r0"
+PR = "r1"
 
 S = "${WORKDIR}/git"
 
 inherit setuptools 
 
-RDEPENDS_${PN} = "python"
+RDEPENDS_${PN} = "python python-email"

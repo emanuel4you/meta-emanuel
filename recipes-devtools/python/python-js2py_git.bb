@@ -8,11 +8,11 @@ SRC_URI = "git://github.com/PiotrDabkowski/Js2Py.git;protocol=http;branch=master
 SRCREV = "144b1701faf0b97900a73978ae8f87ca80f0a079"
 
 PV = "0.39+git${SRCPV}"
-PR = "r0"
+PR = "r1"
 
 S = "${WORKDIR}/git"
 
 inherit setuptools 
 
-RDEPENDS_${PN} = "python python python-six"
+RDEPENDS_${PN} = "python python-pprint python-six"
 
