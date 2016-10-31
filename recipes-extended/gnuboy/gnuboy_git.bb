@@ -1,7 +1,7 @@
 SUMMARY = "Gameboy Emulator based on SDL"
 MAINTAINER = "GeminiTeam"
 HOMEPAGE = "http://www.i-have-a-dreambox.com"
-PACKAGE_ARCH = "mips32el"
+PACKAGE_ARCH = "${DEFAULTTUNE}"
 SECTION = "emulators"
 PRIORITY = "optional"
 DEPENDS = "virtual/libsdl"

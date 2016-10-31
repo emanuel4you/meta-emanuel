@@ -2,7 +2,7 @@ SUMMARY = "The shellinaboxd daemon implements a webserver that listens on the sp
 The web server publishes one or more services that will be displayed in a VT100 emulator implemented as an AJAX web application."
 MAINTAINER = "GeminiTeam"
 HOMEPAGE = "https://github.com/shellinabox/shellinabox/wiki"
-PACKAGE_ARCH = "mips32el"
+PACKAGE_ARCH = "${DEFAULTTUNE}"
 SECTION = "terminal"
 PRIORITY = "optional"
 

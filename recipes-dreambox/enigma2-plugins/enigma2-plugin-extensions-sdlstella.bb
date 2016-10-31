@@ -4,7 +4,7 @@ SUMMARY = "Atari Emulator for enigma2"
 	
 MAINTAINER = "GeminiTeam"
 HOMEPAGE = "http://www.i-have-a-dreambox.com"
-PACKAGE_ARCH = "mips32el"
+PACKAGE_ARCH = "${DEFAULTTUNE}"
 SOURCE = "https://github.com/emanuel4you/meta-emanuel"
 
 PV = "0.1"
