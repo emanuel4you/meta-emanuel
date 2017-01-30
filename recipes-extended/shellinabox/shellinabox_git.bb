@@ -28,7 +28,7 @@ SRC_URI += "git://github.com/shellinabox/shellinabox;protocol=https;branch=${BRA
 
 S = "${WORKDIR}/git"
 
-inherit autotools systemd
+inherit autotools-brokensep systemd
 
 SYSTEMD_SERVICE_${PN} = "shellinabox.service"
 

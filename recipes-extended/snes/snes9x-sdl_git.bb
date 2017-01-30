@@ -27,7 +27,9 @@ S = "${WORKDIR}/git/sdl"
 
 DEPENDS = "virtual/libsdl libpng"
 
-inherit autotools
+inherit autotools-brokensep
+
+#EXTRA_OECONF += "--enable-debug --enable-debugger"
 
 do_install() {
 	install -d ${D}${bindir}

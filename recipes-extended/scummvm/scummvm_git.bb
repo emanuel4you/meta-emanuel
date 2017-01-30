@@ -4,13 +4,27 @@ LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=441c28d2cf86e15a37fa47e15a72fbac"
 
 #SRCREV = "366e164705a920ccd5de9dc606399f9c5b54913c"
-SRCREV = "d750c85fc8da4128f1f7e8ddbb9ffbf9e86cf16f"
+#SRCREV = "d750c85fc8da4128f1f7e8ddbb9ffbf9e86cf16f"
+SRCREV = "b7469085b596e3d2fc330fe23ec60c76116c2ed7"
 BRANCH="master"
 
 PN = "scummvm"
-PV = "1.8.0+git${SRCPV}"
+PV = "1.9.0+git${SRCPV}"
 
-DEPENDS = "virtual/libsdl libvorbis libogg zlib libmad mpeg2dec"
+DEPENDS = "virtual/libsdl \
+	libsdl-net \
+	libvorbis \
+	libogg \
+	zlib \
+	curl \
+	libmad \
+	mpeg2dec \
+	flac \
+	libjpeg-turbo \
+	faad2 \
+	libpng \
+	libtheora \
+"
 
 SRC_URI = "git://github.com/scummvm/scummvm.git;protocol=https;branch=${BRANCH};tag=${SRCREV} \
 "

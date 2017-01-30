@@ -1,16 +1,23 @@
---- git.original/configure.ac	2015-12-21 00:39:11.767728736 +0100
-+++ git/configure.ac	2015-12-21 00:40:07.332443901 +0100
-@@ -145,18 +145,6 @@
+--- git/configure.ac	2016-11-13 02:01:31.927576997 +0100
++++ git/configure.ac.new	2016-11-13 02:10:18.263557439 +0100
+@@ -144,25 +144,6 @@
+ if test $ac_auto_cflags = yes; then
+ 	if test $ac_enable_debug = yes ; then
  		CFLAGS="-O0 -g -Wall -Wno-sign-compare -Wno-unused"
- 	elif test $ac_enable_test = yes ; then
- 		CFLAGS="-O0 -Wall -Wno-sign-compare -Wno-unused"
 -	else
 -		CFLAGS=""
--		AC_CHECK_CC_OPT([-march=native], [CFLAGS="$CFLAGS -march=native"], [])
+-		dnl GCC has problems with -march=native with Raspberry,
+-		dnl resulting in a "double free or corruption" error
+-		dnl See: https://www.raspberrypi.org/forums/viewtopic.php?f=28&t=139091
+-		if ! $GREP ARM /proc/cpuinfo >/dev/null 2>&1; then
+-			AC_CHECK_CC_OPT([-march=native], [CFLAGS="$CFLAGS -march=native"], [])
+-		fi
 -		AC_CHECK_CC_OPT([-O2], [CFLAGS="$CFLAGS -O2"], [CFLAGS="$CFLAGS -O"])
 -		AC_CHECK_CC_OPT([-fomit-frame-pointer], [CFLAGS="$CFLAGS -fomit-frame-pointer"], [])
 -		dnl Code is not ready for strict-aliasing. It seems working, but who know...
 -		AC_CHECK_CC_OPT([-fno-strict-aliasing], [CFLAGS="$CFLAGS -fno-strict-aliasing"], [])
+-		dnl Code is not ready for strict-overflow. It seems working, but who know...
+-		AC_CHECK_CC_OPT([-fno-strict-overflow], [CFLAGS="$CFLAGS -fno-strict-overflow"], [])
 -		dnl We are not interested in stack protection
 -		AC_CHECK_CC_OPT([-fno-stack-protector], [CFLAGS="$CFLAGS -fno-stack-protector"], [])
 -		AC_CHECK_CC_OPT([-Wall], [CFLAGS="$CFLAGS -Wall"], [])
@@ -19,89 +26,3 @@
  	fi
  	if test ! -z $ac_host_cflags; then
  		CFLAGS="$ac_host_cflags $CFLAGS"
-@@ -708,15 +696,9 @@
- 	[ac_lib_freetype=auto]
- )
- if test $ac_lib_freetype = auto; then
--	AC_PATH_PROGS(
--		[ac_lib_freetype_config],
--		[${ac_tool_prefix}freetype-config],
--		[],
--		[${ac_lib_freetype_path}]
--	)
--	if test -z $ac_lib_freetype_config; then
--		ac_lib_freetype=no
--	else
-+	PKG_CHECK_MODULES([FREETYPE2], [freetype2 >= 2.5], [ac_lib_freetype=yes], [ac_lib_freetype=no])
-+
-+	if test $ac_lib_freetype = yes; then
- 		ac_save_CFLAGS="$CFLAGS"
- 		ac_save_LIBS="$LIBS"
- 		FREETYPECFLAGS=`$ac_lib_freetype_config $ac_lib_freetype_args --cflags`
-@@ -739,15 +721,9 @@
- 		LIBS="$ac_save_LIBS"
- 	fi
- elif test $ac_lib_freetype = yes; then
--	AC_PATH_PROGS(
--		[ac_lib_freetype_config],
--		[${ac_tool_prefix}freetype-config],
--		[],
--		[${ac_lib_freetype_path}]
--	)
--	if test -z $ac_lib_freetype_config ; then
--		AC_MSG_ERROR([the ${ac_tool_prefix}freetype-config tool is missing])
--	else
-+	PKG_CHECK_MODULES([FREETYPE2], [freetype2 >= 2.5], [ac_lib_freetype=yes], [ac_lib_freetype=no])
-+
-+	if test $ac_lib_freetype = yes; then
- 		ac_save_CFLAGS="$CFLAGS"
- 		ac_save_LIBS="$LIBS"
- 		FREETYPECFLAGS=`$ac_lib_freetype_config $ac_lib_freetype_args --cflags`
-@@ -796,15 +772,11 @@
- 	[ac_lib_sdl=auto]
- )
- if test $ac_lib_sdl = auto; then
--	AC_PATH_PROGS(
--		[ac_lib_sdl_config],
--		[${ac_tool_prefix}sdl-config],
--		[],
--		[${ac_lib_sdl_path}]
--	)
--	if test -z $ac_lib_sdl_config; then
--		ac_lib_sdl=no
--	else
-+	PKG_CHECK_MODULES([SDL], [sdl >= 1.2], [ac_lib_sdl=yes], [ac_lib_sdl=no])
-+
-+	if test $ac_lib_sdl = no ; then
-+		AC_MSG_ERROR([libSDL is missing])
-+		
- 		ac_save_CFLAGS="$CFLAGS"
- 		ac_save_LIBS="$LIBS"
- 		SDLCFLAGS=`$ac_lib_sdl_config $ac_lib_sdl_args --cflags`
-@@ -827,14 +799,10 @@
- 		LIBS="$ac_save_LIBS"
- 	fi
- elif test $ac_lib_sdl = yes; then
--	AC_PATH_PROGS(
--		[ac_lib_sdl_config],
--		[${ac_tool_prefix}sdl-config],
--		[],
--		[${ac_lib_sdl_path}]
--	)
--	if test -z $ac_lib_sdl_config ; then
--		AC_MSG_ERROR([the ${ac_tool_prefix}sdl-config tool is missing])
-+	PKG_CHECK_MODULES([SDL], [sdl >= 1.2], [ac_lib_sdl=yes], [ac_lib_sdl=no])
-+
-+	if test $ac_lib_sdl = no ; then
-+		AC_MSG_ERROR([libsdl is missing])
- 	else
- 		ac_save_CFLAGS="$CFLAGS"
- 		ac_save_LIBS="$LIBS"
-@@ -1145,8 +1113,6 @@
- 
- dnl Final
- AC_SUBST([CONF_LIB_DIRECT],[$ac_lib_direct_flag])
--AC_SUBST([mandir],['${prefix}/man'])
--AC_SUBST([docdir],['${prefix}/doc'])
- AC_CONFIG_FILES([Makefile])
- AC_OUTPUT

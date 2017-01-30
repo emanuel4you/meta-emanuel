@@ -8,12 +8,19 @@ LICENSE = "LGPL"
 PR = "r1"
 
 SRC_URI = "http://www.libsdl.org/projects/SDL_net/release/SDL_net-${PV}.tar.gz \
-	   file://libtool2.patch \
-	  "
+	file://configure.patch \
+	file://libtool2.patch \
+	file://* \
+	"
 
 S = "${WORKDIR}/SDL_net-${PV}"
 
-inherit autotools
+inherit autotools-brokensep
+
+do_configure_prepend_${PN} () {
+
+	autoreconf -Wcross --verbose --install --force
+}
 
 EXTRA_OECONF += "SDL_CONFIG=${STAGING_BINDIR_CROSS}/sdl-config"
 

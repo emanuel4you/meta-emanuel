@@ -20,4 +20,4 @@ DEPENDS = "virtual/libsdl zlib libpng"
 
 FILES_${PN} += "${datadir}/icons"
 
-inherit autotools
+inherit autotools-brokensep

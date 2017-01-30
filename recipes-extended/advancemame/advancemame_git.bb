@@ -6,7 +6,9 @@ HOMEPAGE = "http://www.advancemame.it"
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=8ca43cbc842c2336e835926c2166c28b"
 
-SRCREV = "fdd33b5f5d803aaae3109b5d18a6a90012f490cd"
+#SRCREV = "fdd33b5f5d803aaae3109b5d18a6a90012f490cd"
+#SRCREV = "7c2653bded5fd296f1d2a1618769f90d9283d058"
+SRCREV = "e047d2c1d339817baccec8a49fb40508756ba27b"
 BRANCH="master"
 
 PN = "advancemame"
@@ -14,11 +16,12 @@ PV = "1.5.0+git${SRCPV}"
 PR = "r1"
 
 SRC_URI = "git://github.com/amadvance/advancemame.git;protocol=https;branch=${BRANCH};tag=${SRCREV} \
-	file://configurerc.patch \
-	  "
+	file://configure.patch \
+	"
+
 S = "${WORKDIR}/git"
 
-inherit autotools
+inherit autotools-brokensep pkgconfig
 
 CFLAGS =+ " -I${STAGING_INCDIR}/SDL/ -I${STAGING_INCDIR}/ -DUSE_SMP"
 LDFLAGS =+ " -lSDL -lpthread"
@@ -30,7 +33,9 @@ do_configure_prepend() {
 EXTRA_OECONF = " \
                  --enable-pthread \
                  --docdir=${docdir}/advance/ \
+                 --enable-sdl \
                "
+               
 
 do_install() {
 	install -d ${D}/${bindir}

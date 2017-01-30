@@ -1,0 +1,35 @@
+--- php-5.6.23/ext/gd/config.m4	2016-06-22 03:50:40.000000000 +0200
++++ php-5.6.23.new/ext/gd/config.m4	2017-01-11 22:37:57.000000000 +0100
+@@ -184,20 +184,11 @@
+ AC_DEFUN([PHP_GD_FREETYPE2],[
+   if test "$PHP_FREETYPE_DIR" != "no"; then
+ 
+-    for i in $PHP_FREETYPE_DIR /usr/local /usr; do
+-      if test -f "$i/bin/freetype-config"; then
+-        FREETYPE2_DIR=$i
+-        FREETYPE2_CONFIG="$i/bin/freetype-config"
+-        break
+-      fi
+-    done
+-
+-    if test -z "$FREETYPE2_DIR"; then
+-      AC_MSG_ERROR([freetype-config not found.])
+-    fi
++    AC_CHECK_HEADERS(ft2build.h)
++    PKG_CHECK_MODULES(FREETYPE,freetype2)
+ 
+-    FREETYPE2_CFLAGS=`$FREETYPE2_CONFIG --cflags`
+-    FREETYPE2_LIBS=`$FREETYPE2_CONFIG --libs`
++    FREETYPE2_CFLAGS="$FREETYPE_CFLAGS"
++    FREETYPE2_LIBS="$FREETYPE_LIBS"
+ 
+     PHP_EVAL_INCLINE($FREETYPE2_CFLAGS)
+     PHP_EVAL_LIBLINE($FREETYPE2_LIBS, GD_SHARED_LIBADD)
+@@ -249,7 +240,6 @@
+   PHP_CHECK_LIBRARY(gd, gdImageCreateFromPng,   [AC_DEFINE(HAVE_GD_PNG,              1, [ ])], [], [ $GD_SHARED_LIBADD ])
+   PHP_CHECK_LIBRARY(gd, gdImageCreateFromWebp,  [AC_DEFINE(HAVE_GD_WEBP,             1, [ ])], [], [ $GD_SHARED_LIBADD ])
+   PHP_CHECK_LIBRARY(gd, gdImageCreateFromJpeg,  [AC_DEFINE(HAVE_GD_JPG,              1, [ ])], [], [ $GD_SHARED_LIBADD ])
+-  PHP_CHECK_LIBRARY(gd, gdImageCreateFromXpm,   [AC_DEFINE(HAVE_GD_XPM,              1, [ ])], [], [ $GD_SHARED_LIBADD ])
+   PHP_CHECK_LIBRARY(gd, gdImageStringFT,        [AC_DEFINE(HAVE_GD_FREETYPE,         1, [ ])], [], [ $GD_SHARED_LIBADD ])
+   PHP_CHECK_LIBRARY(gd, gdVersionString,        [AC_DEFINE(HAVE_GD_LIBVERSION,       1, [ ])], [], [ $GD_SHARED_LIBADD ])
+ ])

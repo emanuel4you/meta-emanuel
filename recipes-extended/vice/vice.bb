@@ -40,7 +40,12 @@ PRIORITY = "optional"
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=c93c0550bd3173f4504b2cbd8991e50b"
 
-DEPENDS = "virtual/libsdl"
+DEPENDS = "virtual/libsdl \
+	libjpeg-turbo \
+	zlib \
+	giflib \
+	libpng \
+"
 
 PV = "2.4.20"
 PR = "r0"
@@ -52,7 +57,7 @@ SRC_URI = "${SOURCEFORGE_MIRROR}/vice-emu/${PN}-${PV}.tar.gz \
 SRC_URI[md5sum] = "91e083f83b491753923c44a69f0b1839"
 SRC_URI[sha256sum] = "e5d3d125940f0fafe409aabeec9de4e3ae8d9c19a731aa7ec6a57f6d2b897c5f"
 
-inherit autotools
+inherit autotools-brokensep
 
 S = "${WORKDIR}/${PN}-${PV}"
 
@@ -79,5 +84,5 @@ do_configure() {
 		--with-sdlsound \
 		--with-uithreads \
 		--enable-arch=sdl \
-		--disable-lame \
+		--disable-lame
 }
