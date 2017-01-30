@@ -7,7 +7,7 @@ PRIORITY = "optional"
 DEPENDS = "virtual/libsdl"
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=8ca43cbc842c2336e835926c2166c28b"
-LICENSE = "GPL"
+LICENSE = "GPLv2"
 
 SRCREV="32d122935914526db3267903027e9077b0f4594b"
 BRANCH="master"
@@ -21,10 +21,15 @@ SRC_URI += "git://github.com/rofl0r/gnuboy.git;protocol=https;branch=${BRANCH};t
 
 S = "${WORKDIR}/git"
 
-inherit autotools
+inherit autotools-brokensep pkgconfig
+
+EXTRA_OECONF = " \
+	--with-sdl \
+"
 
 do_configure_prepend() {
  sed -i -e 's:LIBS="$LIBS -L/usr/local/lib -L/usr/X11R6/lib": :g' ${S}/configure.in
+ sed -i -e 's:SYS_INCS = -I/usr/local/include @XINCS@ -I./sys/nix: :g' ${S}/Makefile.in
 }
 
 do_install() {

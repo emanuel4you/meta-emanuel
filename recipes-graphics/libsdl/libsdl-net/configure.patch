@@ -1,0 +1,41 @@
+--- SDL_net-1.2.7/configure.in	2007-07-20 14:40:02.000000000 +0200
++++ SDL_net-1.2.7/configure.in.new	2016-11-13 11:55:07.810362692 +0100
+@@ -1,5 +1,4 @@
+ dnl Process this file with autoconf to produce a configure script.
+-AC_INIT(README)
+ 
+ dnl Set various version strings - taken gratefully from the GTk sources
+ 
+@@ -11,12 +10,19 @@
+ # if backwards compatibility has been broken,
+ # set BINARY_AGE and INTERFACE_AGE to 0.
+ 
+-MAJOR_VERSION=1
+-MINOR_VERSION=2
+-MICRO_VERSION=7
++m4_define([sdlnet_major_version],[1])
++m4_define([sdlnet_minor_version],[2])
++m4_define([sdlnet_micro_version],[7])
++m4_define([sdlnet_version], [sdlnet_major_version.sdlnet_minor_version.sdlnet_micro_version])
++
++AC_INIT([SDL_net], [sdlnet_version])
++
++MAJOR_VERSION=sdlnet_major_version
++MINOR_VERSION=sdlnet_minor_version
++MICRO_VERSION=sdlnet_micro_version
+ INTERFACE_AGE=7
+ BINARY_AGE=7
+-VERSION=$MAJOR_VERSION.$MINOR_VERSION.$MICRO_VERSION
++VERSION=sdlnet_version
+ 
+ AC_SUBST(MAJOR_VERSION)
+ AC_SUBST(MINOR_VERSION)
+@@ -40,7 +46,7 @@
+ AC_CANONICAL_HOST
+ 
+ dnl Setup for automake
+-AM_INIT_AUTOMAKE(SDL_net, $VERSION)
++AM_INIT_AUTOMAKE([foreign])
+ 
+ dnl Check for tools
+ 

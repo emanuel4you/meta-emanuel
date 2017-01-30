@@ -4,15 +4,12 @@ SECTION = "emulators"
 PRIORITY = "optional"
 LICENSE = "GPL"
 
-PACKAGE_ARCH = "mips32el"
-
 SRC_URI = "${SOURCEFORGE_MIRROR}/scummvm/scummvm-${PV}.tar.bz2"
 
-inherit autotools 
+inherit autotools-brokensep pkgconfig
 
 EXTRA_OECONF = "--host=${HOST_SYS} \
 		--backend=sdl \
-		--with-sdl-prefix=${STAGING_BINDIR_CROSS} \
 		--disable-alsa \
 		--prefix=${prefix} \
 		--with-ogg-prefix=${STAGING_LIBDIR}/.. \

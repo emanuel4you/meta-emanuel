@@ -30,4 +30,8 @@ def main(session, **kwargs):
 	session.openWithCallback(playCallBack, SnesBrowser)
 	
 def Plugins(**kwargs):
-	return [PluginDescriptor(name=_("Snes"), description=_("Super Nintendo Emulator for dreambox"), icon="g3icon_snes.png", where = PluginDescriptor.WHERE_EXTENSIONSMENU,fnc=main), PluginDescriptor(name=_("Snes"), description=_("Super Nintendo Emulator for dreambox"), icon="snes.png", where=PluginDescriptor.WHERE_PLUGINMENU, fnc=main)]
+	return [
+		PluginDescriptor(name=_("Snes"), description=_("Super Nintendo Emulator for dreambox"), icon="g3icon_snes.png", where = PluginDescriptor.WHERE_EXTENSIONSMENU,fnc=main), 
+		PluginDescriptor(name=_("Snes"), description=_("Super Nintendo Emulator for dreambox"), icon="snes.png", where=PluginDescriptor.WHERE_PLUGINMENU, fnc=main),
+		PluginDescriptor(where=PluginDescriptor.WHERE_SESSIONSTART,fnc=init)
+		]

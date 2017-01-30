@@ -21,3 +21,4 @@ EXTRA_OECONF = "--disable-static --enable-cdrom --enable-threads --enable-timers
 "
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+

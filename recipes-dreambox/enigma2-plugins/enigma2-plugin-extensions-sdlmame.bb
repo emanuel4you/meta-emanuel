@@ -8,26 +8,20 @@ PACKAGE_ARCH = "${DEFAULTTUNE}"
 SOURCE = "https://github.com/emanuel4you/meta-emanuel"
 
 PV = "0.1"
-PR = "r5"
+PR = "r6"
 PN = "enigma2-plugin-extensions-sdlmame"
 
 RDEPENDS_${PN} += "advancemame \
 "
 
-SRC_URI = "file://${PN}/*"
+SRC_URI = "file://*"
 S = "${WORKDIR}/"
 
-FILES_${PN} += "${datadir}"
-FILES_${PN} += "${libdir}"
+FILES_${PN} += "/usr/lib/enigma2/python/Plugins/Extensions/SDLMame"
 
-inherit autotools pkgconfig
+inherit autotools-brokensep
 
-bindir = "/usr/bin"
-sbindir = "/usr/sbin"
-libdir = "/usr/lib"
-datadir = "/usr/share"
-
-pkg_preinst_${PN} () {
+pkg_preinst_${PN}() {
 
 if [ -f /root/.advance/advmame.rc ];
 then
