@@ -1,4 +1,4 @@
-meta-emanuel
+meta-emanuel (OE2.2)
 ------------
 openembedded meta-layer for dreambox (dm820/dm7080)
 
