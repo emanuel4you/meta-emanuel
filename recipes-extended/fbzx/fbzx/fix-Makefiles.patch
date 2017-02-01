@@ -1,0 +1,197 @@
+diff -Nur git/Makefile git.new/Makefile
+--- git/Makefile	2016-12-16 10:18:32.000000000 +0100
++++ git.new/Makefile	2017-02-01 02:11:54.321889163 +0100
+@@ -1,7 +1,7 @@
+ ifdef PREFIX
+ 	PREFIX2B=$(PREFIX)
+ else
+-	PREFIX2B=/usr/local
++	PREFIX2B=/usr
+ endif
+ 
+ ifdef DESTDIR
+@@ -21,16 +21,10 @@
+ 	rm -f $(PREFIX2)/bin/fbzx
+ 	mkdir -p $(PREFIX2)/bin
+ 	mkdir -p $(PREFIX2)/share/fbzx
+-	mkdir -p $(PREFIX2)/share/applications
+-	mkdir -p $(PREFIX2)/share/pixmaps
+ 	mkdir -p $(PREFIX2)/share/doc/fbzx
+-	mkdir -p $(PREFIX2)/share/appdata
+ 	cp src/fbzx $(PREFIX2)/bin
+ 	cp data/keymap.bmp $(PREFIX2)/share/fbzx
+-	cp data/fbzx.desktop $(PREFIX2)/share/applications
+-	cp data/fbzx.svg $(PREFIX2)/share/pixmaps
+ 	cp AMSTRAD CAPABILITIES COPYING FAQ README README.TZX VERSIONS.md $(PREFIX2)/share/doc/fbzx/
+-	cp fbzx.appdata.xml $(PREFIX2)/share/appdata/
+ 	chmod 644 $(PREFIX2)/share/fbzx/*
+ 	chmod 644 $(PREFIX2)/share/doc/fbzx/*
+ ifndef NOROMS
+@@ -42,8 +36,5 @@
+ uninstall:
+ 	rm -f $(PREFIX2)/bin/fbzx
+ 	rm -rf $(PREFIX2)/share/fbzx
+-	rm -f $(PREFIX2)/share/applications/fbzx.desktop
+-	rm -f $(PREFIX2)/share/pixmaps/fbzx.svg
+ 	rm -rf $(PREFIX2)/share/doc/fbzx
+ 	rm -rf $(PREFIX2)/share/spectrum-roms
+-	rm -f $(PREFIX2)/share/appdata/fbzx.appdata.xml
+diff -Nur git/src/Makefile git.new/src/Makefile
+--- git/src/Makefile	2016-12-16 10:18:32.000000000 +0100
++++ git.new/src/Makefile	2017-02-01 01:29:03.000000000 +0100
+@@ -1,81 +1,76 @@
+-CC=g++ -c -O2
+-CPP=g++ -c -O2
+-LN=g++ -O2
+-
+-CFLAGS += `pkg-config --cflags sdl libpulse-simple alsa` -D D_SOUND_PULSE -D D_SOUND_ALSA -D D_SOUND_OSS
+-CPPFLAGS += `pkg-config --cflags sdl libpulse-simple alsa` -D D_SOUND_PULSE -D D_SOUND_ALSA -D D_SOUND_OSS
+-LDFLAGS += `pkg-config --libs sdl libpulse-simple alsa`
+-
++CFLAGS += `pkg-config --cflags sdl alsa` -D D_SOUND_ALSA
++CXXFLAGS += `pkg-config --cflags sdl alsa` -D D_SOUND_ALSA
++LDFLAGS += `pkg-config --libs sdl alsa`
+ 
+ fbzx: cargador.o cmdline.o computer.o emulator.o keyboard.o llscreen.o llsound.o menus.o microdrive.o mouse.o osd.o screen.o signals.o spk_ay.o tape.o Z80free.o Z80free_codes.o Z80free_codesCB.o Z80free_codesED.o Z80free_codesDD.o Z80free_codesFD.o Z80free_codesDDCB.o Z80free_codesFDCB.o 
+-	$(LN) -o fbzx cargador.o cmdline.o computer.o emulator.o keyboard.o llscreen.o llsound.o menus.o microdrive.o mouse.o osd.o screen.o signals.o spk_ay.o tape.o Z80free.o Z80free_codes.o Z80free_codesCB.o Z80free_codesED.o Z80free_codesDD.o Z80free_codesFD.o Z80free_codesDDCB.o Z80free_codesFDCB.o  $(LDFLAGS)
++	$(CXX) -o fbzx cargador.o cmdline.o computer.o emulator.o keyboard.o llscreen.o llsound.o menus.o microdrive.o mouse.o osd.o screen.o signals.o spk_ay.o tape.o Z80free.o Z80free_codes.o Z80free_codesCB.o Z80free_codesED.o Z80free_codesDD.o Z80free_codesFD.o Z80free_codesDDCB.o Z80free_codesFDCB.o $(LDFLAGS)
+ 
+ Z80free.o: z80free/Z80free.c z80free/Z80free.h
+-	$(CC) -o Z80free.o z80free/Z80free.c
++	$(CXX) -o Z80free.o -c z80free/Z80free.c
+ 
+ Z80free_codes.o: z80free/Z80free_codes.c z80free/Z80free.h
+-	$(CC) -o Z80free_codes.o z80free/Z80free_codes.c
++	$(CXX) -o Z80free_codes.o -c z80free/Z80free_codes.c
+ 	
+ Z80free_codesCB.o: z80free/Z80free_codesCB.c z80free/Z80free.h
+-	$(CC) -o Z80free_codesCB.o z80free/Z80free_codesCB.c
++	$(CXX) -o Z80free_codesCB.o -c z80free/Z80free_codesCB.c
+ 
+ Z80free_codesED.o: z80free/Z80free_codesED.c z80free/Z80free.h
+-	$(CC) -o Z80free_codesED.o z80free/Z80free_codesED.c
++	$(CXX) -o Z80free_codesED.o -c z80free/Z80free_codesED.c
+ 	
+ Z80free_codesDD.o: z80free/Z80free_codesDD.c z80free/Z80free.h
+-	$(CC) -o Z80free_codesDD.o z80free/Z80free_codesDD.c
++	$(CXX) -o Z80free_codesDD.o -c z80free/Z80free_codesDD.c
+ 	
+ Z80free_codesFD.o: z80free/Z80free_codesFD.c z80free/Z80free.h
+-	$(CC) -o Z80free_codesFD.o z80free/Z80free_codesFD.c
++	$(CXX) -o Z80free_codesFD.o -c z80free/Z80free_codesFD.c
+ 
+ Z80free_codesDDCB.o: z80free/Z80free_codesDDCB.c z80free/Z80free.h
+-	$(CC) -o Z80free_codesDDCB.o z80free/Z80free_codesDDCB.c
++	$(CXX) -o Z80free_codesDDCB.o -c z80free/Z80free_codesDDCB.c
+ 	
+ Z80free_codesFDCB.o: z80free/Z80free_codesFDCB.c z80free/Z80free.h
+-	$(CC) -o Z80free_codesFDCB.o z80free/Z80free_codesFDCB.c
++	$(CXX) -o Z80free_codesFDCB.o -c z80free/Z80free_codesFDCB.c
+ 
+ cargador.o: cargador.cpp spk_ay.hh keyboard.hh emulator.hh screen.hh osd.hh z80free/Z80free.h computer.hh signals.hh llscreen.hh tape.hh cargador.hh
+-	$(CPP) $(CPPFLAGS) -o cargador.o cargador.cpp
++	$(CXX) $(CXXFLAGS) -o cargador.o -c cargador.cpp
+ 
+ cmdline.o: cmdline.cpp cmdline.hh
+-	$(CPP) $(CPPFLAGS) -o cmdline.o cmdline.cpp
++	$(CXX) $(CXXFLAGS) -o cmdline.o -c cmdline.cpp
+ 
+ computer.o: computer.cpp z80free/Z80free.h llsound.hh mouse.hh keyboard.hh computer.hh screen.hh signals.hh llscreen.hh tape.hh emulator.hh osd.hh spk_ay.hh microdrive.hh menus.hh
+-	$(CPP) $(CPPFLAGS) -o computer.o computer.cpp
++	$(CXX) $(CXXFLAGS) -o computer.o -c computer.cpp
+ 
+ emulator.o: emulator.cpp mouse.hh z80free/Z80free.h spk_ay.hh keyboard.hh llsound.hh cmdline.hh computer.hh screen.hh signals.hh llscreen.hh tape.hh emulator.hh osd.hh microdrive.hh menus.hh cargador.hh
+-	$(CPP) $(CPPFLAGS) -o emulator.o emulator.cpp
++	$(CXX) $(CXXFLAGS) -o emulator.o -c emulator.cpp
+ 
+ keyboard.o: keyboard.cpp menus.hh llscreen.hh llsound.hh computer.hh screen.hh signals.hh z80free/Z80free.h tape.hh emulator.hh osd.hh keyboard.hh
+-	$(CPP) $(CPPFLAGS) -o keyboard.o keyboard.cpp
++	$(CXX) $(CXXFLAGS) -o keyboard.o -c keyboard.cpp
+ 
+ llscreen.o: llscreen.cpp osd.hh font.h llscreen.hh
+-	$(CPP) $(CPPFLAGS) -o llscreen.o llscreen.cpp
++	$(CXX) $(CXXFLAGS) -o llscreen.o -c llscreen.cpp
+ 
+ llsound.o: llsound.cpp emulator.hh screen.hh osd.hh z80free/Z80free.h computer.hh signals.hh llscreen.hh tape.hh llsound.hh
+-	$(CPP) $(CPPFLAGS) -o llsound.o llsound.cpp
++	$(CXX) $(CXXFLAGS) -o llsound.o -c llsound.cpp
+ 
+ menus.o: menus.cpp mouse.hh z80free/Z80free.h spk_ay.hh microdrive.hh keyboard.hh llsound.hh llscreen.hh menus.hh tape.hh signals.hh emulator.hh screen.hh osd.hh computer.hh cargador.hh
+-	$(CPP) $(CPPFLAGS) -o menus.o menus.cpp
++	$(CXX) $(CXXFLAGS) -o menus.o -c menus.cpp
+ 
+ microdrive.o: microdrive.cpp osd.hh emulator.hh screen.hh z80free/Z80free.h computer.hh signals.hh llscreen.hh tape.hh microdrive.hh
+-	$(CPP) $(CPPFLAGS) -o microdrive.o microdrive.cpp
++	$(CXX) $(CXXFLAGS) -o microdrive.o -c microdrive.cpp
+ 
+ mouse.o: mouse.cpp osd.hh keyboard.hh emulator.hh screen.hh z80free/Z80free.h computer.hh signals.hh llscreen.hh tape.hh mouse.hh
+-	$(CPP) $(CPPFLAGS) -o mouse.o mouse.cpp
++	$(CXX) $(CXXFLAGS) -o mouse.o -c mouse.cpp
+ 
+ osd.o: osd.cpp osd.hh
+-	$(CPP) $(CPPFLAGS) -o osd.o osd.cpp
++	$(CXX) $(CXXFLAGS) -o osd.o -c osd.cpp
+ 
+ screen.o: screen.cpp keyboard.hh computer.hh screen.hh signals.hh llscreen.hh z80free/Z80free.h tape.hh emulator.hh osd.hh
+-	$(CPP) $(CPPFLAGS) -o screen.o screen.cpp
++	$(CXX) $(CXXFLAGS) -o screen.o -c screen.cpp
+ 
+ signals.o: signals.cpp signals.hh
+-	$(CPP) $(CPPFLAGS) -o signals.o signals.cpp
++	$(CXX) $(CXXFLAGS) -o signals.o -c signals.cpp
+ 
+ spk_ay.o: spk_ay.cpp spk_ay.hh llsound.hh computer.hh screen.hh signals.hh llscreen.hh z80free/Z80free.h tape.hh emulator.hh osd.hh
+-	$(CPP) $(CPPFLAGS) -o spk_ay.o spk_ay.cpp
++	$(CXX) $(CXXFLAGS) -o spk_ay.o -c spk_ay.cpp
+ 
+ tape.o: tape.cpp z80free/Z80free.h tape.hh signals.hh emulator.hh screen.hh osd.hh computer.hh llscreen.hh
+-	$(CPP) $(CPPFLAGS) -o tape.o tape.cpp
++	$(CXX) $(CXXFLAGS) -o tape.o -c tape.cpp
+ 
+diff -Nur git/src/z80free/Makefile git.new/src/z80free/Makefile
+--- git/src/z80free/Makefile	2016-12-16 10:18:32.000000000 +0100
++++ git.new/src/z80free/Makefile	2017-02-01 01:39:39.489961062 +0100
+@@ -1,32 +1,29 @@
+-CC = gcc -c -O1 -Wall
+-CCo = gcc -O1 -Wall
+-
+ z80free_tester: z80free_tester.o Z80free.o Z80free_codes.o Z80free_codesCB.o Z80free_codesED.o Z80free_codesDD.o Z80free_codesFD.o Z80free_codesDDCB.o Z80free_codesFDCB.o 
+-	$(CCo) -o z80free_tester z80free_tester.o Z80free.o Z80free_codes.o Z80free_codesCB.o Z80free_codesED.o Z80free_codesDD.o Z80free_codesFD.o Z80free_codesDDCB.o Z80free_codesFDCB.o
++	$(CC) -o z80free_tester z80free_tester.o Z80free.o Z80free_codes.o Z80free_codesCB.o Z80free_codesED.o Z80free_codesDD.o Z80free_codesFD.o Z80free_codesDDCB.o Z80free_codesFDCB.o
+ 
+ z80free_tester.o: z80free_tester.c Z80free.h
+-	$(CC) -o z80free_tester.o z80free_tester.c
++	$(CC) -c -o z80free_tester.o z80free_tester.c
+ 
+ Z80free.o: Z80free.c Z80free.h
+-	$(CC) -o Z80free.o Z80free.c
++	$(CC) -c -o Z80free.o Z80free.c
+ 
+ Z80free_codes.o: Z80free_codes.c Z80free.h
+-	$(CC) -o Z80free_codes.o Z80free_codes.c
++	$(CC) -c -o Z80free_codes.o Z80free_codes.c
+ 	
+ Z80free_codesCB.o: Z80free_codesCB.c Z80free.h
+-	$(CC) -o Z80free_codesCB.o Z80free_codesCB.c
++	$(CC) -c -o Z80free_codesCB.o Z80free_codesCB.c
+ 
+ Z80free_codesED.o: Z80free_codesED.c Z80free.h
+-	$(CC) -o Z80free_codesED.o Z80free_codesED.c
++	$(CC) -c -o Z80free_codesED.o Z80free_codesED.c
+ 	
+ Z80free_codesDD.o: Z80free_codesDD.c Z80free.h
+-	$(CC) -o Z80free_codesDD.o Z80free_codesDD.c
++	$(CC) -c -o Z80free_codesDD.o Z80free_codesDD.c
+ 	
+ Z80free_codesFD.o: Z80free_codesFD.c Z80free.h
+-	$(CC) -o Z80free_codesFD.o Z80free_codesFD.c
++	$(CC) -c -o Z80free_codesFD.o Z80free_codesFD.c
+ 
+ Z80free_codesDDCB.o: Z80free_codesDDCB.c Z80free.h
+-	$(CC) -o Z80free_codesDDCB.o Z80free_codesDDCB.c
++	$(CC) -c -o Z80free_codesDDCB.o Z80free_codesDDCB.c
+ 	
+ Z80free_codesFDCB.o: Z80free_codesFDCB.c Z80free.h
+-	$(CC) -o Z80free_codesFDCB.o Z80free_codesFDCB.c
+\ Kein Zeilenumbruch am Dateiende.
++	$(CC) -c -o Z80free_codesFDCB.o Z80free_codesFDCB.c
