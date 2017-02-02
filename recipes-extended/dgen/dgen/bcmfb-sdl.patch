@@ -1,0 +1,11 @@
+--- git.new/sdl/sdl.cpp	2017-02-02 19:40:34.900239142 +0100
++++ git/sdl/sdl.cpp	2017-02-02 00:06:33.905659582 +0100
+@@ -3811,7 +3811,7 @@
+ 		// [fbcon workaround]
+ 		// Double buffering usually makes screen blink during refresh.
+ 		if ((SDL_VideoDriverName(buf, sizeof(buf))) &&
+-		    (!strcmp(buf, "fbcon")))
++		    (!strcmp(buf, "bcmfb")))
+ 			dgen_doublebuffer = 0;
+ 	}
+ #endif
