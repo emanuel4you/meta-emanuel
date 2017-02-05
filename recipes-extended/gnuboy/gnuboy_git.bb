@@ -13,11 +13,13 @@ SRCREV="32d122935914526db3267903027e9077b0f4594b"
 BRANCH="master"
 
 PV = "1.0.4+git${SRCPV}"
-PR = "r0"
+PR = "r1"
 PN = "gnuboy"
 
 
-SRC_URI += "git://github.com/rofl0r/gnuboy.git;protocol=https;branch=${BRANCH};tag=${SRCREV}"
+SRC_URI += "git://github.com/rofl0r/gnuboy.git;protocol=https;branch=${BRANCH};tag=${SRCREV} \
+	file://pkg-sdl.patch \
+"
 
 S = "${WORKDIR}/git"
 

@@ -1,0 +1,37 @@
+diff -Nur git/configure git.new/configure
+--- git/configure	2017-02-05 13:43:41.000000000 +0100
++++ git.new/configure	2017-02-05 13:48:42.733466351 +0100
+@@ -2655,8 +2655,8 @@
+ fi
+ 
+ if test "$SDL_CONFIG" ; then
+-SDL_LIBS="`sdl-config --libs`"
+-SDL_CFLAGS="`sdl-config --cflags`"
++SDL_LIBS="`pkg-config sdl --libs`"
++SDL_CFLAGS="`pkg-config sdl --cflags`"
+ old_incs="$INCS"
+ INCS="$INCS $SDL_CFLAGS"
+ echo "$as_me:2662: checking for SDL_Init in -lSDL" >&5
+diff -Nur git/configure.in git.new/configure.in
+--- git/configure.in	2017-02-05 13:43:41.000000000 +0100
++++ git.new/configure.in	2017-02-05 13:40:07.000000000 +0100
+@@ -21,7 +21,7 @@
+ 
+ 
+ 
+-LIBS="$LIBS -L/usr/local/lib -L/usr/X11R6/lib"
++ 
+ 
+ 
+ 
+@@ -79,8 +79,8 @@
+ if test "$with_sdl" != "no" ; then
+ AC_CHECK_PROG(SDL_CONFIG, sdl-config, yes)
+ if test "$SDL_CONFIG" ; then
+-SDL_LIBS="`sdl-config --libs`"
+-SDL_CFLAGS="`sdl-config --cflags`"
++SDL_LIBS="`pkg-config sdl --libs`"
++SDL_CFLAGS="`pkg-config sdl --cflags`"
+ old_incs="$INCS"
+ INCS="$INCS $SDL_CFLAGS"
+ AC_CHECK_LIB(SDL, SDL_Init, [
