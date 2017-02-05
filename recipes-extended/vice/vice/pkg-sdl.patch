@@ -1,0 +1,32 @@
+diff -Nur vice-2.4.20/configure vice-2.4.20.new/configure
+--- vice-2.4.20/configure	2015-04-30 23:37:11.000000000 +0200
++++ vice-2.4.20.new/configure	2017-02-05 14:17:36.501401924 +0100
+@@ -14109,9 +14109,9 @@
+                         if test x"$sdl_config" = "xno"; then
+             LIBS="$LIBS -lSDL"
+         else
+-            CFLAGS="$CFLAGS `$sdl_config --cflags`"
+-            CXXFLAGS="$CXXFLAGS `$sdl_config --cflags`"
+-            LIBS="$LIBS `$sdl_config --libs`"
++            CFLAGS="$CFLAGS `pkg-config sdl --cflags`"
++            CXXFLAGS="$CXXFLAGS `pkg-config sdl --cflags`"
++            LIBS="$LIBS `pkg-config sdl --libs`"
+         fi
+ 
+ 
+diff -Nur vice-2.4.20/configure.ac vice-2.4.20.new/configure.ac
+--- vice-2.4.20/configure.ac	2015-04-30 23:34:35.000000000 +0200
++++ vice-2.4.20.new/configure.ac	2017-02-05 14:15:01.049407700 +0100
+@@ -2055,9 +2055,9 @@
+         if test x"$sdl_config" = "xno"; then
+             LIBS="$LIBS -lSDL"
+         else
+-            CFLAGS="$CFLAGS `$sdl_config --cflags`"
+-            CXXFLAGS="$CXXFLAGS `$sdl_config --cflags`"
+-            LIBS="$LIBS `$sdl_config --libs`"
++            CFLAGS="$CFLAGS `pkg-config --cflags`"
++            CXXFLAGS="$CXXFLAGS `pkg-config --cflags`"
++            LIBS="$LIBS `pkg-config --libs`"
+         fi
+ 
+ 

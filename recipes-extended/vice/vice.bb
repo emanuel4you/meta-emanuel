@@ -48,10 +48,11 @@ DEPENDS = "virtual/libsdl \
 "
 
 PV = "2.4.20"
-PR = "r0"
+PR = "r1"
 PN = "vice"
 
 SRC_URI = "${SOURCEFORGE_MIRROR}/vice-emu/${PN}-${PV}.tar.gz \
+	file://pkg-sdl.patch \
 "
 
 SRC_URI[md5sum] = "91e083f83b491753923c44a69f0b1839"
