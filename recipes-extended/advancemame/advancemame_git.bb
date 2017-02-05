@@ -18,7 +18,7 @@ BRANCH="master"
 
 PN = "advancemame"
 PV = "3.2+git${SRCPV}"
-PR = "r0"
+PR = "r1"
 
 SRC_URI = "git://github.com/amadvance/advancemame.git;protocol=https;branch=${BRANCH};tag=${SRCREV} \
 	file://configure.patch \
@@ -45,14 +45,15 @@ EXTRA_OECONF = " \
 
 do_install() {
 	install -d ${D}${bindir}
-	install -m 0755 ${S}/obj/mame/linux/blend/advmame ${D}${bindir}/advmame
-	install -m 0755 ${S}/obj/menu/linux/blend/advmenu ${D}${bindir}/advmenu
-#	install -m 0755 ${S}/obj/cfg/linux/blend/advcfg ${D}${bindir}/advcfg
-#	install -m 0755 ${S}/obj/v/linux/blend/advv ${D}${bindir}/advv
-#	install -m 0755 ${S}/obj/s/linux/blend/advs ${D}${bindir}/advs
-#	install -m 0755 ${S}/obj/j/linux/blend/advj ${D}${bindir}/advj
-#	install -m 0755 ${S}/obj/k/linux/blend/advk ${D}${bindir}/advk
-#	install -m 0755 ${S}/obj/m/linux/blend/advm ${D}${bindir}/advm
+	install -m 0755 ${S}/advmame ${D}${bindir}/advmame
+	install -m 0755 ${S}/advmenu ${D}${bindir}/advmenu
+	install -m 0755 ${S}/advmess ${D}${bindir}/advmess
+#	install -m 0755 ${S}/advcfg ${D}${bindir}/advcfg
+#	install -m 0755 ${S}/advv ${D}${bindir}/advv
+#	install -m 0755 ${S}/advs ${D}${bindir}/advs
+#	install -m 0755 ${S}/advj ${D}${bindir}/advj
+#	install -m 0755 ${S}/advk ${D}${bindir}/advk
+#	install -m 0755 ${S}/advm ${D}${bindir}/advm
 	
 	install -d ${D}/${datadir}/advance/
 	install -d ${D}/${datadir}/advance/sample
@@ -86,6 +87,12 @@ if [ x"$D" = "x" ]; then
 		cp -a /root/.advance/advmenu.rc /root/.advance/advmenu.rc.$DATE
 	fi
 	/usr/bin/advmenu --default
+	
+	if [ -f /root/.advance/advmess.rc ]; then
+		DATE=`date +"%Y%m%d%H%M"`
+		cp -a /root/.advance/advmess.rc /root/.advance/advmess.rc.$DATE
+	fi
+	/usr/bin/advmess --default
 else
     exit 0
 fi
