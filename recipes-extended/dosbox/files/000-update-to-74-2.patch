@@ -62235,18 +62235,18 @@ diff -Nur dosbox-0.74/update-to-74-2.patch dosbox-0.74.patch/update-to-74-2.patc
 +-  if test x$sdl_exec_prefix != x ; then
 +-     sdl_args="$sdl_args --exec-prefix=$sdl_exec_prefix"
 +-     if test x${SDL_CONFIG+set} != xset ; then
-+-        SDL_CONFIG=$sdl_exec_prefix/bin/sdl-config
++-        SDL_CONFIG=$"pkg-config sdl"
 +-     fi
 +-  fi
 +-  if test x$sdl_prefix != x ; then
 +-     sdl_args="$sdl_args --prefix=$sdl_prefix"
 +-     if test x${SDL_CONFIG+set} != xset ; then
-+-        SDL_CONFIG=$sdl_prefix/bin/sdl-config
++-        SDL_CONFIG=$"pkg-config sdl"
 +-     fi
 +-  fi
 +-
 +-  # Extract the first word of "sdl-config", so it can be a program name with args.
-+-set dummy sdl-config; ac_word=$2
++-set dummy "pkg-conf sdl"; ac_word=$2
 +-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 +-$as_echo_n "checking for $ac_word... " >&6; }
 +-if test "${ac_cv_path_SDL_CONFIG+set}" = set; then :
@@ -62293,8 +62293,8 @@ diff -Nur dosbox-0.74/update-to-74-2.patch dosbox-0.74.patch/update-to-74-2.patc
 +-  if test "$SDL_CONFIG" = "no" ; then
 +-    no_sdl=yes
 +-  else
-+-    SDL_CFLAGS=`$SDL_CONFIG $sdlconf_args --cflags`
-+-    SDL_LIBS=`$SDL_CONFIG $sdlconf_args --libs`
++-    SDL_CFLAGS=`pkg-config sdl --cflags`
++-    SDL_LIBS=`pkg-config sdl --libs`
 +-
 +-    sdl_major_version=`$SDL_CONFIG $sdl_args --version | \
 +-           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\1/'`
