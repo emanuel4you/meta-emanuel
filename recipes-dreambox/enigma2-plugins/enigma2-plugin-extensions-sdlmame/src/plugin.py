@@ -9,13 +9,8 @@ def init(reason, **kwargs):
 	if reason == 0:
 		if "session" in kwargs:
 			if not os_path.exists("/root/.advance/advmame.rc"):
-				print "[advmame]: config  /root/.advance/advmame.rc not found creating defaults..."
-				if not os_path.exists("/root/.advance"):
-					os_mkdir("/root/.advance")
-					os_mkdir("/root/.advance/rom")
-				copyfile(resolveFilename(SCOPE_PLUGINS, "Extensions/SDLMame/advmame.rc.default"), "/root/.advance/advmame.rc")
-			if not os_path.exists("/root/.advance/advmenu.rc"):
-				copyfile(resolveFilename(SCOPE_PLUGINS, "Extensions/SDLMame/advmenu.rc.default"), "/root/.advance/advmenu.rc")
+				print "[advmame]: config  /root/.advance/advmame.rc not found creating it..."
+				os_system("/usr/bin/advmame --default")
 
 def main(session, **kwargs):
 	def playCallBack(val=None):

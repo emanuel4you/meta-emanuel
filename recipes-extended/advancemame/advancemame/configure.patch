@@ -1,0 +1,171 @@
+diff -Nur git/configure.ac git.new/configure.ac
+--- git/configure.ac	2017-02-05 14:57:12.000000000 +0100
++++ git.new/configure.ac	2017-02-05 14:51:31.000000000 +0100
+@@ -155,37 +155,6 @@
+ if test $ac_auto_cflags = yes; then
+ 	if test $ac_enable_debug = yes ; then
+ 		CFLAGS="-O0 -g -Wall -Wno-sign-compare -Wno-unused"
+-	else
+-		CFLAGS=""
+-		dnl Optimization level O2 generally gives better performance than O3,
+-		dnl expecially in biggest and slowest games
+-		AC_CHECK_CC_OPT([-O2], [CFLAGS="$CFLAGS -O2"], [])
+-		dnl GCC 4 has problems with -march=native in Raspbian,
+-		dnl resulting in a "double free or corruption" error
+-		dnl See: https://www.raspberrypi.org/forums/viewtopic.php?f=28&t=139091
+-		if ! $GREP ARM /proc/cpuinfo >/dev/null 2>&1; then
+-			AC_CHECK_CC_OPT([-march=native], [CFLAGS="$CFLAGS -march=native"], [])
+-			AC_CHECK_CC_OPT([-fomit-frame-pointer], [CFLAGS="$CFLAGS -fomit-frame-pointer"], [])
+-		dnl Raspberry Pi 3
+-		elif $GREP a02082\\\|a22082 /proc/cpuinfo >/dev/null 2>&1; then
+-			AC_CHECK_CC_OPT([-march=armv8-a+crc], [CFLAGS="$CFLAGS -march=armv8-a+crc"], [])
+-			AC_CHECK_CC_OPT([-mfpu=neon-fp-armv8], [CFLAGS="$CFLAGS -mfpu=neon-fp-armv8"], [])
+-		dnl Raspberry Pi 2
+-		elif $GREP a01040\\\|a01041\\\|a21041\\\|a22042 /proc/cpuinfo >/dev/null 2>&1; then
+-			AC_CHECK_CC_OPT([-march=armv7-a], [CFLAGS="$CFLAGS -march=armv7-a"], [])
+-			AC_CHECK_CC_OPT([-mfpu=neon-vfpv4], [CFLAGS="$CFLAGS -mfpu=neon-vfpv4"], [])
+-		fi
+-		dnl Code was written when compilers where not aggressively optimizing undefined behaviour about aliasing
+-		AC_CHECK_CC_OPT([-fno-strict-aliasing], [CFLAGS="$CFLAGS -fno-strict-aliasing"], [])
+-		dnl Code was written when compilers where not aggressively optimizing undefined behaviour about overflow in signed integers
+-		AC_CHECK_CC_OPT([-fno-strict-overflow], [CFLAGS="$CFLAGS -fno-strict-overflow"], [])
+-		dnl Code was written on Intel where char is signed
+-		AC_CHECK_CC_OPT([-fsigned-char], [CFLAGS="$CFLAGS -fsigned-char"], [])
+-		dnl We are not interested in stack protection
+-		AC_CHECK_CC_OPT([-fno-stack-protector], [CFLAGS="$CFLAGS -fno-stack-protector"], [])
+-		AC_CHECK_CC_OPT([-Wall], [CFLAGS="$CFLAGS -Wall"], [])
+-		AC_CHECK_CC_OPT([-Wno-sign-compare], [CFLAGS="$CFLAGS -Wno-sign-compare"], [])
+-		AC_CHECK_CC_OPT([-Wno-unused], [CFLAGS="$CFLAGS -Wno-unused"], [])
+ 	fi
+ 	if test ! -z $ac_host_cflags; then
+ 		CFLAGS="$ac_host_cflags $CFLAGS"
+@@ -757,22 +726,16 @@
+ 	[ac_lib_freetype=auto]
+ )
+ if test $ac_lib_freetype = auto; then
+-	AC_PATH_PROGS(
+-		[ac_lib_freetype_config],
+-		[${ac_tool_prefix}freetype-config],
+-		[],
+-		[${ac_lib_freetype_path}]
+-	)
+-	if test -z $ac_lib_freetype_config; then
+-		ac_lib_freetype=no
+-	else
++	PKG_CHECK_MODULES([FREETYPE2], [freetype2 >= 2.5], [ac_lib_freetype=yes], [ac_lib_freetype=no])
++
++	if test $ac_lib_freetype = yes; then
+ 		ac_save_CFLAGS="$CFLAGS"
+ 		ac_save_LIBS="$LIBS"
+-		FREETYPECFLAGS=`$ac_lib_freetype_config $ac_lib_freetype_args --cflags`
++		FREETYPECFLAGS=`pkg-config freetype2 --cflags`
+ 		if test $ac_enable_static = yes ; then
+-			FREETYPELIBS=`$ac_lib_freetype_config $ac_lib_freetype_args --libs --static`
++			FREETYPELIBS=`pkg-config freetype2 --libs --static`
+ 		else
+-			FREETYPELIBS=`$ac_lib_freetype_config $ac_lib_freetype_args --libs`
++			FREETYPELIBS=`pkg-config freetype2 --libs`
+ 		fi
+ 		CFLAGS="$FREETYPECFLAGS $CFLAGS"
+ 		LIBS="$FREETYPELIBS $LIBS"
+@@ -792,19 +755,13 @@
+ 		LIBS="$ac_save_LIBS"
+ 	fi
+ elif test $ac_lib_freetype = yes; then
+-	AC_PATH_PROGS(
+-		[ac_lib_freetype_config],
+-		[${ac_tool_prefix}freetype-config],
+-		[],
+-		[${ac_lib_freetype_path}]
+-	)
+-	if test -z $ac_lib_freetype_config ; then
+-		AC_MSG_ERROR([the ${ac_tool_prefix}freetype-config tool is missing])
+-	else
++	PKG_CHECK_MODULES([FREETYPE2], [freetype2 >= 2.5], [ac_lib_freetype=yes], [ac_lib_freetype=no])
++
++	if test $ac_lib_freetype = yes; then
+ 		ac_save_CFLAGS="$CFLAGS"
+ 		ac_save_LIBS="$LIBS"
+-		FREETYPECFLAGS=`$ac_lib_freetype_config $ac_lib_freetype_args --cflags`
+-		FREETYPELIBS=`$ac_lib_freetype_config $ac_lib_freetype_args --libs`
++		FREETYPECFLAGS=`pkg-config freetype2 --cflags`
++		FREETYPELIBS=`pkg-config freetype2 --libs`
+ 		CFLAGS="$FREETYPECFLAGS $CFLAGS"
+ 		LIBS="$FREETYPELIBS $LIBS"
+ 		AC_MSG_CHECKING([for FreeType2])
+@@ -941,22 +898,17 @@
+ 	if test $ac_lib_sdl2 = yes; then
+ 		ac_lib_sdl=no
+ 	else
+-		AC_PATH_PROGS(
+-			[ac_lib_sdl_config],
+-			[${ac_tool_prefix}sdl-config],
+-			[],
+-			[${ac_lib_sdl_path}]
+-		)
+-		if test -z $ac_lib_sdl_config; then
+-			ac_lib_sdl=no
++		PKG_CHECK_MODULES([SDL], [sdl >= 1.2], [ac_lib_sdl=yes], [ac_lib_sdl=no])
++		if test $ac_lib_sdl = no ; then
++			AC_MSG_ERROR([libsdl is missing])
+ 		else
+ 			ac_save_CFLAGS="$CFLAGS"
+ 			ac_save_LIBS="$LIBS"
+-			SDLCFLAGS=`$ac_lib_sdl_config $ac_lib_sdl_args --cflags`
++			SDLCFLAGS=`pkg-config sdl --cflags`
+ 			if test $ac_enable_static = yes ; then
+-				SDLLIBS=`$ac_lib_sdl_config $ac_lib_sdl_args --static-libs`
++				SDLLIBS=`pkg-config sdl --static-libs`
+ 			else
+-				SDLLIBS=`$ac_lib_sdl_config $ac_lib_sdl_args --libs`
++				SDLLIBS=`pkg-config sdl --libs`
+ 			fi
+ 			CFLAGS="$SDLCFLAGS $CFLAGS"
+ 			LIBS="$SDLLIBS $LIBS"
+@@ -976,22 +928,17 @@
+ 	if test $ac_lib_sdl2 = yes; then
+ 		AC_MSG_ERROR([You cannot enable both SDL and SDL2])
+ 	fi
+-	AC_PATH_PROGS(
+-		[ac_lib_sdl_config],
+-		[${ac_tool_prefix}sdl-config],
+-		[],
+-		[${ac_lib_sdl_path}]
+-	)
+-	if test -z $ac_lib_sdl_config ; then
+-		AC_MSG_ERROR([the ${ac_tool_prefix}sdl-config tool is missing])
++	PKG_CHECK_MODULES([SDL], [sdl >= 1.2], [ac_lib_sdl=yes], [ac_lib_sdl=no])
++	if test $ac_lib_sdl = no ; then
++		AC_MSG_ERROR([libsdl is missing])
+ 	else
+ 		ac_save_CFLAGS="$CFLAGS"
+ 		ac_save_LIBS="$LIBS"
+-		SDLCFLAGS=`$ac_lib_sdl_config $ac_lib_sdl_args --cflags`
++		SDLCFLAGS=`pkg-config sdl --cflags`
+ 		if test $ac_enable_static = yes ; then
+-			SDLLIBS=`$ac_lib_sdl_config $ac_lib_sdl_args --static-libs`
++			SDLLIBS=`pkg-config sdl --static-libs`
+ 		else
+-			SDLLIBS=`$ac_lib_sdl_config $ac_lib_sdl_args --libs`
++			SDLLIBS=`pkg-config sdl --libs`
+ 		fi
+ 		CFLAGS="$SDLCFLAGS $CFLAGS"
+ 		LIBS="$SDLLIBS $LIBS"
+diff -Nur git/Makefile.usr git.new/Makefile.usr
+--- git/Makefile.usr	2017-02-05 14:57:12.000000000 +0100
++++ git.new/Makefile.usr	2017-02-05 14:55:53.000000000 +0100
+@@ -298,10 +298,10 @@
+ CXX = @g++
+ LD = @gcc
+ LDXX = @g++
+-SDLCFLAGS = $(shell sdl-config --cflags)
+-SDLLIBS = $(shell sdl-config --libs)
+-FREETYPECFLAGS = $(shell freetype-config --cflags)
+-FREETYPELIBS = $(shell freetype-config --libs)
++SDLCFLAGS = $(shell pkg-config sdl --cflags)
++SDLLIBS = $(shell pkg-config sdl --libs)
++FREETYPECFLAGS = $(shell pkg-config freetype2 --cflags)
++FREETYPELIBS = $(shell pkg-config freetype2 --libs)
+ endif
+ ifeq ($(CONF_HOST),dos)
+ # Probably you need to changes these to cross compile:
