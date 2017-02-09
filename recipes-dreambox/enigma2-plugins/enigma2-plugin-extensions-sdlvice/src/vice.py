@@ -11,16 +11,11 @@ from Screens.ServiceStopScreen import ServiceStopScreen
 
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 
+from Plugins.Extensions.GameBrowser.browser import GameSummary
+
 from skin import loadSkin
 
-loadSkin(resolveFilename(SCOPE_PLUGINS, "Extensions/SDLVice/skin.xml"))
-
-#-----------------------------------------------------------------------------------
-
-class ViceSummary(Screen):
-	def __init__(self, session, parent):
-		Screen.__init__(self, session, parent = parent)
-		self.skinName = ["ViceSummary"]
+loadSkin(resolveFilename(SCOPE_PLUGINS, "Extensions/GameBrowser/skin.xml"))
 
 #-----------------------------------------------------------------------------------
 
@@ -30,7 +25,7 @@ class Vice(Screen, ServiceStopScreen):
         	self.__rom=rom
 		Screen.__init__(self, session)
 		ServiceStopScreen.__init__(self)
-		self.skinName = ["Vice"]
+		self.skinName = ["Game"]
 		self["lcdinfo"] = StaticText(self.__rom)
 		self["title"] = StaticText(emu)
 		self.__container=eConsoleAppContainer()
@@ -55,4 +50,4 @@ class Vice(Screen, ServiceStopScreen):
 		self.close()
 		
 	def createSummary(self):
-		return ViceSummary
+		return GameSummary

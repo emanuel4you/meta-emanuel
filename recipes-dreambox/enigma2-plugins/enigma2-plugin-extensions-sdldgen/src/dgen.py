@@ -12,16 +12,11 @@ from Screens.Screen import Screen
 from Screens.ServiceStopScreen import ServiceStopScreen
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 
+from Plugins.Extensions.GameBrowser.browser import GameSummary
+
 from skin import loadSkin
 
-loadSkin(resolveFilename(SCOPE_PLUGINS, "Extensions/SDLDgen/skin.xml"))
-
-#-----------------------------------------------------------------------------------
-
-class DgenSummary(Screen):
-	def __init__(self, session, parent):
-		Screen.__init__(self, session, parent = parent)
-		self.skinName = ["DgenSummary"]
+loadSkin(resolveFilename(SCOPE_PLUGINS, "Extensions/GameBrowser/skin.xml"))
 
 #-----------------------------------------------------------------------------------
 
@@ -30,7 +25,7 @@ class Dgen(Screen, ServiceStopScreen):
 		Screen.__init__(self, session)
 		ServiceStopScreen.__init__(self)
 		self.__rom = rom
-		self.skinName = ["Dgen"]
+		self.skinName = ["Game"]
 		self["title"] = StaticText("ZX Sinclair Emulator")
 		self["lcdinfo"] = StaticText(os_path.basename(self.__rom))
 		self.__container=eConsoleAppContainer()
@@ -55,5 +50,5 @@ class Dgen(Screen, ServiceStopScreen):
 		self.close()
 		
 	def createSummary(self):
-		return DgenSummary
+		return GameSummary
 	

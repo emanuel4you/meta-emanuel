@@ -4,6 +4,11 @@ from os import path as os_path
 from os import mkdir as os_mkdir
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS, copyfile
 from Plugins.Plugin import PluginDescriptor
+from Components.config import config, ConfigSubsection, ConfigDirectory
+
+config.plugins.snes = ConfigSubsection()
+config.plugins.snes.romlocation = ConfigDirectory(default='/media/')
+config.plugins.snes.romlocation.save()
 
 def init(reason, **kwargs):
 	if reason == 0:
@@ -17,17 +22,17 @@ def init(reason, **kwargs):
 
 def main(session, **kwargs):
 	
-	def playCallBack(val=None):
-		if val is not None:
-			print "[Snes]",val
+	def playCallBack(rom=None):
+		if rom is not None:
+			print "[Snes]",rom
 			from snes import Snes
-			session.open(Snes,val)
+			session.open(Snes,rom)
 		else:
 			from Screens.MessageBox import MessageBox
 			session.open(MessageBox, _("No rom selected!"), MessageBox.TYPE_ERROR, timeout=4)
 		
-	from browser import SnesBrowser
-	session.openWithCallback(playCallBack, SnesBrowser)
+	from Plugins.Extensions.GameBrowser.browser import GameBrowser
+	session.openWithCallback(playCallBack, GameBrowser, filter="^.*\.(zip|smc|SMC|sfc|SFC)", name="Snes")
 	
 def Plugins(**kwargs):
 	return [

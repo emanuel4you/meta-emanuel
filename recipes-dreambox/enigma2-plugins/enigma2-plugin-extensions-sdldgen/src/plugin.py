@@ -1,19 +1,24 @@
 # -*- coding: utf-8 -*-
 from Plugins.Plugin import PluginDescriptor
+from Components.config import config, ConfigSubsection, ConfigDirectory
+
+config.plugins.dgen = ConfigSubsection()
+config.plugins.dgen.romlocation = ConfigDirectory(default='/media/')
+config.plugins.dgen.romlocation.save()
 
 def main(session, **kwargs):
 	
-	def playCallBack(val=None):
-		if val is not None:
-			print "[dgen]",val
+	def playCallBack(rom=None):
+		if rom is not None:
+			print "[dgen]",rom
 			from dgen import Dgen
-			session.open(Dgen,val)
+			session.open(Dgen,rom)
 		else:
 			from Screens.MessageBox import MessageBox
 			session.open(MessageBox, _("No rom selected!"), MessageBox.TYPE_ERROR, timeout=4)
 		
-	from browser import DgenBrowser
-	session.openWithCallback(playCallBack, DgenBrowser)
+	from Plugins.Extensions.GameBrowser.browser import GameBrowser
+	session.openWithCallback(playCallBack, GameBrowser, filter="^.*\.(MD|md|ZIP|zip|32x|32X)", name="Dgen")
 	
 def Plugins(**kwargs):
 	return [

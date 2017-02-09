@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 from Plugins.Plugin import PluginDescriptor
+from Components.config import config, ConfigSubsection, ConfigDirectory
+
+config.plugins.fbzx = ConfigSubsection()
+config.plugins.fbzx.romlocation = ConfigDirectory(default='/media/')
+config.plugins.fbzx.romlocation.save()
 
 def load(session, **kwargs):
 	
@@ -12,8 +17,8 @@ def load(session, **kwargs):
 			from Screens.MessageBox import MessageBox
 			session.open(MessageBox, _("No rom selected!"), MessageBox.TYPE_ERROR, timeout=4)
 		
-	from browser import FbzxBrowser
-	session.openWithCallback(playCallBack, FbzxBrowser)
+	from Plugins.Extensions.GameBrowser.browser import GameBrowser
+	session.openWithCallback(playCallBack, GameBrowser, filter="^.*\.(z80|Z80|SNA|sna|TAP|tap|TZX|tzx)", name="Fbzx")
 	
 def main(session, **kwargs):
 	from fbzx import Fbzx

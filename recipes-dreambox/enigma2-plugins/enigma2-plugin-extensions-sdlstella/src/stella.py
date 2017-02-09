@@ -14,25 +14,19 @@ from Screens.ServiceStopScreen import ServiceStopScreen
 from Plugins.Plugin import PluginDescriptor
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 
+from Plugins.Extensions.GameBrowser.browser import GameSummary
+
 from skin import loadSkin
 
-loadSkin(resolveFilename(SCOPE_PLUGINS, "Extensions/SDLStella/skin.xml"))
+loadSkin(resolveFilename(SCOPE_PLUGINS, "Extensions/GameBrowser/skin.xml"))
 
 #-----------------------------------------------------------------------------------
-
-class StellaSummary(Screen):
-	def __init__(self, session, parent):
-		Screen.__init__(self, session, parent = parent)
-		self.skinName = ["StellaSummary"]
-
-#-----------------------------------------------------------------------------------
-
 class Stella(Screen, ServiceStopScreen):
 	def __init__(self, session, rom):
 		Screen.__init__(self, session)
 		ServiceStopScreen.__init__(self)
 		self.__rom = rom
-		self.skinName = ["Stella"]
+		self.skinName = ["Game"]
 		self["title"] = StaticText("Stella")
 		self["lcdinfo"] = StaticText(os_path.basename(self.__rom))
 		self.__container=eConsoleAppContainer()
@@ -55,4 +49,4 @@ class Stella(Screen, ServiceStopScreen):
 		self.close()
 		
 	def createSummary(self):
-		return StellaSummary
+		return GameSummary

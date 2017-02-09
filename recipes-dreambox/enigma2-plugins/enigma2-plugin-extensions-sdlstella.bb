@@ -7,11 +7,12 @@ HOMEPAGE = "http://www.i-have-a-dreambox.com"
 PACKAGE_ARCH = "${DEFAULTTUNE}"
 SOURCE = "https://github.com/emanuel4you/meta-emanuel"
 
-PV = "0.1"
-PR = "r3"
+PV = "0.2"
+PR = "r1"
 PN = "enigma2-plugin-extensions-sdlstella"
 
 RDEPENDS_${PN} += "stella \
+	enigma2-plugin-module-gamebrowser \
 "
 
 SRC_URI = "file://*"

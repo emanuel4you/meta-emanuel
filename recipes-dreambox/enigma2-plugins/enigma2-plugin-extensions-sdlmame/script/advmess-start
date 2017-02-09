@@ -1,0 +1,50 @@
+#!/bin/sh
+
+EXE="advmess"
+ROM=$1
+NAME=`basename ${0}`
+LOG_FILE=/var/log/${NAME}.log
+
+# set DEBUG="1" to log start-script only, DEBUG="1" to log start-script & advmame
+DEBUG="1"
+
+export SDL_DEBUG=${DEBUG}
+
+if [ "${DEBUG}" != "0" ];
+then
+	echo "*** ${NAME} `date` ***" > ${LOG_FILE}; cat /proc/bus/input/devices >> ${LOG_FILE}; cat $0 >> ${LOG_FILE}; set -x; exec >> ${LOG_FILE} 2>&1
+fi
+
+export DISPLAY=0
+export TERM="linux"
+export HOME="/root"
+export SDL_VIDEODRIVER="bcmfb"
+export SDL_BCMFB_ACCEL=0
+export SDL_AUDIODRIVER="alsa"
+export SDL_DEBUG=${DEBUG}
+export SDL_NOMOUSE=1
+
+#echo "U:720x576i-170" > /sys/class/graphics/fb0/mode
+
+fbset -depth 16
+
+if [ "${ROM}" != "" ];
+then
+	if [ "${DEBUG}" >= "2" ];
+	then
+		/usr/bin/${EXE} "${ROM}" --log
+	else
+		/usr/bin/${EXE} "${ROM}"
+	fi
+else
+	echo "${NAME}: no rom found! - exit"
+	exit 1
+fi
+
+if [ -f "/=" ];
+then
+	rm -f /=
+fi
+
+
+exit 0

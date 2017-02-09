@@ -2,7 +2,7 @@
 
 EXE="advmenu"
 NAME=`basename ${0}`
-LOG_FILE=/var/log/${EXE}.log
+LOG_FILE=/var/log/${NAME}.log
 
 # set DEBUG="1" to debug
 DEBUG="1"

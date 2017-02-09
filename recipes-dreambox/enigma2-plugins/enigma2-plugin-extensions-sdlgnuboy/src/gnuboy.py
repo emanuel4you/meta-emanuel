@@ -14,16 +14,11 @@ from Screens.ServiceStopScreen import ServiceStopScreen
 from Plugins.Plugin import PluginDescriptor
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 
+from Plugins.Extensions.GameBrowser.browser import GameSummary
+
 from skin import loadSkin
 
-loadSkin(resolveFilename(SCOPE_PLUGINS, "Extensions/SDLGnuBoy/skin.xml"))
-
-#-----------------------------------------------------------------------------------
-
-class GnuBoySummary(Screen):
-	def __init__(self, session, parent):
-		Screen.__init__(self, session, parent = parent)
-		self.skinName = ["GnuBoySummary"]
+loadSkin(resolveFilename(SCOPE_PLUGINS, "Extensions/GameBrowser/skin.xml"))
 
 #-----------------------------------------------------------------------------------
 
@@ -32,8 +27,8 @@ class GnuBoy(Screen, ServiceStopScreen):
 		Screen.__init__(self, session)
 		ServiceStopScreen.__init__(self)
 		self.__rom = rom
-		self.skinName = ["GnuBoy"]
-		self["title"] = StaticText("Gnu Boy")
+		self.skinName = ["Game"]
+		self["title"] = StaticText("GnuBoy")
 		self["lcdinfo"] = StaticText(os_path.basename(self.__rom))
 		self.__container=eConsoleAppContainer()
 		self.__appClosed_conn = self.__container.appClosed.connect(self.__runFinished)
@@ -55,4 +50,4 @@ class GnuBoy(Screen, ServiceStopScreen):
 		self.close()
 		
 	def createSummary(self):
-		return GnuBoySummary
+		return GameSummary

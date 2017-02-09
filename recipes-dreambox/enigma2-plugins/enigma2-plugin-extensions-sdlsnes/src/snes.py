@@ -12,16 +12,11 @@ from Screens.Screen import Screen
 from Screens.ServiceStopScreen import ServiceStopScreen
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS, copyfile
 
+from Plugins.Extensions.GameBrowser.browser import GameSummary
+
 from skin import loadSkin
 
-loadSkin(resolveFilename(SCOPE_PLUGINS, "Extensions/SDLSnes/skin.xml"))
-
-#-----------------------------------------------------------------------------------
-
-class SnesSummary(Screen):
-	def __init__(self, session, parent):
-		Screen.__init__(self, session, parent = parent)
-		self.skinName = ["SnesSummary"]
+loadSkin(resolveFilename(SCOPE_PLUGINS, "Extensions/GameBrowser/skin.xml"))
 
 #-----------------------------------------------------------------------------------
 
@@ -30,7 +25,7 @@ class Snes(Screen, ServiceStopScreen):
 		Screen.__init__(self, session)
 		ServiceStopScreen.__init__(self)
 		self.__rom = rom
-		self.skinName = ["Snes"]
+		self.skinName = ["Game"]
 		self["title"] = StaticText("Super Nintendo Emulator")
 		self["lcdinfo"] = StaticText(os_path.basename(self.__rom))
 		self.__container=eConsoleAppContainer()
@@ -62,5 +57,5 @@ class Snes(Screen, ServiceStopScreen):
 		self.close()
 		
 	def createSummary(self):
-		return SnesSummary
+		return GameSummary
 	
