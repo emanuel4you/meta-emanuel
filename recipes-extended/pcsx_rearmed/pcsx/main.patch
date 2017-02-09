@@ -1,0 +1,29 @@
+--- git/frontend/main.h	2017-02-04 12:01:55.780105094 +0100
++++ git.new/frontend/main.h	2017-02-04 21:12:39.000000000 +0100
+@@ -21,16 +21,16 @@
+ 
+ #include "config.h"
+ 
+-#define DEFAULT_MEM_CARD_1 "/.pcsx/memcards/card1.mcd"
+-#define DEFAULT_MEM_CARD_2 "/.pcsx/memcards/card2.mcd"
+-#define MEMCARD_DIR "/.pcsx/memcards/"
+-#define PLUGINS_DIR "/.pcsx/plugins/"
+-#define PLUGINS_CFG_DIR "/.pcsx/plugins/cfg/"
+-#define PCSX_DOT_DIR "/.pcsx/"
+-#define STATES_DIR "/.pcsx/sstates/"
+-#define CHEATS_DIR "/.pcsx/cheats/"
+-#define PATCHES_DIR "/.pcsx/patches/"
+-#define BIOS_DIR "/bios/"
++#define DEFAULT_MEM_CARD_1 "~/.pcsx/memcards/card1.mcd"
++#define DEFAULT_MEM_CARD_2 "~/.pcsx/memcards/card2.mcd"
++#define MEMCARD_DIR "~/.pcsx/memcards/"
++#define PLUGINS_DIR "~/.pcsx/plugins/"
++#define PLUGINS_CFG_DIR "~/.pcsx/plugins/cfg/"
++#define PCSX_DOT_DIR "~/.pcsx/"
++#define STATES_DIR "~/.pcsx/sstates/"
++#define CHEATS_DIR "~/.pcsx/cheats/"
++#define PATCHES_DIR "~/.pcsx/patches/"
++#define BIOS_DIR "~/.pcsx/bios/"
+ 
+ extern char cfgfile_basename[MAXPATHLEN];
+ 

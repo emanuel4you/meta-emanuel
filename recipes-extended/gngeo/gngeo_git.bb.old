@@ -1,0 +1,35 @@
+SUMMARY = "GnGeo-Pi is a portable NeoGeo Emulator optimized for dreambox"
+SECTION = "emulators"
+PRIORITY = "optional"
+HOMEPAGE="https://github.com/ymartel06/GnGeo-Pi"
+AUTHOR = "GeminiTeam"
+LICENSE = "GPLv2"
+LIC_FILES_CHKSUM = "file://COPYING;md5=15969273699440f9449cf74b98e9c05f"
+
+SRC_URI = " \
+    git://github.com/ymartel06/GnGeo-Pi.git;branch=master \
+    file://pkg-sdl.patch \
+"
+
+SRCREV = "b94571c6097b67cfc9db5eaffb98cdc8bcb55c6e"
+PV = "0.85+git${SRCPV}"
+PR = "r0"
+
+inherit autotools-brokensep pkgconfig
+
+DEPENDS = "libsdl \
+	zlib \
+	"
+
+S = "${WORKDIR}/git/gngeo"
+
+FILES_${PN} = "/usr/bin/ /usr/share/gngeo/"
+
+do_configure() {
+	sed -i -e 's:sdl-config:pkg-config sdl:g' ${S}/src/generator68k/Makefile.am
+	sed -i -e 's:sdl-config:pkg-config sdl:g' ${S}/src/generator68k/Makefile.in
+	autoreconf -Wcross --verbose --install --force --exclude=autopoint
+	chmod 0755 configure
+	oe_runconf
+}
+

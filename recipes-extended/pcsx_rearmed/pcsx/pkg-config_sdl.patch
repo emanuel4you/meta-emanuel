@@ -1,0 +1,26 @@
+--- pcsx_rearmed/configure	2017-02-04 12:01:55.776105094 +0100
++++ pcsx_rearmed.mips/configure	2017-02-04 12:29:03.016044625 +0100
+@@ -402,7 +402,7 @@
+     sound_drivers="$sound_drivers pulseaudio"
+     MAIN_LDLIBS="-lpulse $MAIN_LDLIBS"
+   fi
+-  if [ "$need_sdl" = "yes" ] || check_sdl `sdl-config --cflags --libs`; then
++  if [ "$need_sdl" = "yes" ] || check_sdl `pkg-config sdl --cflags --libs`; then
+     sound_drivers="$sound_drivers sdl"
+     need_sdl="yes"
+   fi
+@@ -421,10 +421,10 @@
+ fi
+ 
+ if [ "$need_sdl" = "yes" ]; then
+-  which sdl-config > /dev/null || \
+-    fail "sdl-config is missing; please install libsdl (libsdl1.2-dev)"
+-  CFLAGS="$CFLAGS `sdl-config --cflags`"
+-  MAIN_LDLIBS="`sdl-config --libs` $MAIN_LDLIBS"
++  which pkg-config > /dev/null || \
++    fail "pkg-config sdl is missing; please install libsdl (libsdl1.2-dev)"
++  CFLAGS="$CFLAGS `pkg-config sdl --cflags`"
++  MAIN_LDLIBS="`pkg-config sdl --libs` $MAIN_LDLIBS"
+   check_sdl || fail "please install libsdl (libsdl1.2-dev)"
+ fi
+ 
