@@ -8,7 +8,7 @@ PACKAGE_ARCH = "${DEFAULTTUNE}"
 SOURCE = "https://github.com/emanuel4you/meta-emanuel"
 
 PV = "0.1"
-PR = "r3"
+PR = "r4"
 PN = "enigma2-plugin-extensions-sdlscummvm"
 
 RDEPENDS_${PN} += "scummvm \

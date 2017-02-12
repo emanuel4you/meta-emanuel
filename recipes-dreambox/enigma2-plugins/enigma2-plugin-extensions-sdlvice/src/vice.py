@@ -38,7 +38,7 @@ class Vice(Screen, ServiceStopScreen):
 		eRCInput.getInstance().lock()
 		fbClass.getInstance().lock()
 		com = "export LANG=" + language.getLanguage() + ".UTF-8;"
-		com += "/usr/bin/vice-start '%s'" %self.__emu
+		com += "/usr/bin/vice-sdl-start '%s'" %self.__emu
 		if self.__rom != "":
 			com += " '%s'" %self.__rom
 		self.__container.execute(com)

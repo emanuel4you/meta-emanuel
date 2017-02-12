@@ -26,7 +26,7 @@ def mame_main(session, **kwargs):
 		if rom is not None:
 			print "[advmame]",rom
 			from mame import Mame
-			session.open(Mame, name="MAME", script="/usr/bin/advmame-start", rom=rom)
+			session.open(Mame, name="MAME", script="/usr/bin/advmame-sdl-start", rom=rom)
 		else:
 			from Screens.MessageBox import MessageBox
 			session.open(MessageBox, _("No rom selected!"), MessageBox.TYPE_ERROR, timeout=4)
@@ -39,7 +39,7 @@ def mame_mess(session, **kwargs):
 		if rom is not None:
 			print "[advmess]",rom
 			from mame import Mame
-			session.open(Mame, name="MESS", script="/usr/bin/advmess-start", rom=rom)
+			session.open(Mame, name="MESS", script="/usr/bin/advmess-sdl-start", rom=rom)
 		else:
 			from Screens.MessageBox import MessageBox
 			session.open(MessageBox, _("No rom selected!"), MessageBox.TYPE_ERROR, timeout=4)
@@ -50,7 +50,7 @@ def mame_mess(session, **kwargs):
 def menu(session, **kwargs):
 	print "[advmenu]"
 	from mame import Mame
-	session.open(Mame, name="MENU", script="/usr/bin/advmenu-start")
+	session.open(Mame, name="MENU", script="/usr/bin/advmenu-sdl-start")
 	
 def Plugins(**kwargs):
 	return [

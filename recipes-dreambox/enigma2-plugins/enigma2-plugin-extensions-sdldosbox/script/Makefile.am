@@ -1,3 +1,3 @@
 installdir = $(bindir)
 
-install_SCRIPTS = dosbox-start
+install_SCRIPTS = dosbox-sdl-start

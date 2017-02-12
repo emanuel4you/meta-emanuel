@@ -1,3 +1,3 @@
 installdir = $(bindir)
 
-install_SCRIPTS = vice-start
+install_SCRIPTS = vice-sdl-start

@@ -39,7 +39,7 @@ class Stella(Screen, ServiceStopScreen):
 		eRCInput.getInstance().lock()
 		fbClass.getInstance().lock()
 		com = "export LANG=" + language.getLanguage() + ".UTF-8;"
-		com += "/usr/bin/stella-start '%s';" %self.__rom
+		com += "/usr/bin/stella-sdl-start '%s';" %self.__rom
 		self.__container.execute(com)
 
 	def __runFinished(self,retval):

@@ -40,7 +40,7 @@ class Scummvm(Screen, ServiceStopScreen):
 		eRCInput.getInstance().lock()
 		fbClass.getInstance().lock()
 		com = "export LANG=" + language.getLanguage() + ".UTF-8;"
-		com += "/usr/bin/scummvm-start;"
+		com += "/usr/bin/scummvm-sdl-start;"
 		self.__container.execute(com)
 
 	def __runFinished(self,retval):

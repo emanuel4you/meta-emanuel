@@ -22,7 +22,7 @@ loadSkin(resolveFilename(SCOPE_PLUGINS, "Extensions/GameBrowser/skin.xml"))
 #-----------------------------------------------------------------------------------
 
 class Mame(Screen, ServiceStopScreen):
-	def __init__(self, session, name="MAME", script="/usr/bin/advmame-start", rom=None):
+	def __init__(self, session, name="MAME", script="/usr/bin/advmame-sdl-start", rom=None):
 		self.name = name
 		Screen.__init__(self, session)
 		ServiceStopScreen.__init__(self)

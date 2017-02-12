@@ -40,7 +40,7 @@ class DosBox(Screen, ServiceStopScreen):
 		eRCInput.getInstance().lock()
 		fbClass.getInstance().lock()
 		com = "export LANG=" + language.getLanguage() + ".UTF-8;"
-		com += "/usr/bin/dosbox-start;"
+		com += "/usr/bin/dosbox-sdl-start;"
 		self.__container.execute(com)
 
 	def __runFinished(self,retval):
