@@ -1,0 +1,64 @@
+diff -Nur wolf4sdl/id_vl.cpp wolf4sdl.new/id_vl.cpp
+--- wolf4sdl/id_vl.cpp	2015-04-17 03:23:41.000000000 +0200
++++ wolf4sdl.new/id_vl.cpp	2017-02-15 00:17:55.009509158 +0100
+@@ -109,7 +109,7 @@
+     }
+ 
+     screen = SDL_SetVideoMode(screenWidth, screenHeight, screenBits,
+-          (usedoublebuffering ? SDL_HWSURFACE | SDL_DOUBLEBUF : 0)
++          (usedoublebuffering ? SDL_HWSURFACE  : 0)
+         | (screenBits == 8 ? SDL_HWPALETTE : 0)
+         | (fullscreen ? SDL_FULLSCREEN : 0));
+     if(!screen)
+diff -Nur wolf4sdl/Makefile wolf4sdl.new/Makefile
+--- wolf4sdl/Makefile	2015-04-17 03:23:41.000000000 +0200
++++ wolf4sdl.new/Makefile	2017-02-15 00:04:47.757538412 +0100
+@@ -3,10 +3,10 @@
+ 
+ 
+ BINARY    ?= wolf3d
+-PREFIX    ?= /usr/local
+-MANPREFIX ?= $(PREFIX)/share/man/
+-MANPAGE   ?= man6/wolf4sdl.6
+-DATADIR   ?= $(PREFIX)/share/games/wolf3d/
++PREFIX    ?= /usr
++MANPREFIX ?= $(PREFIX)/share/man/
++MANPAGE   ?= man6/wolf4sdl.6
++DATADIR   ?= $(PREFIX)/share/games/wolf3d/
+ 
+ INSTALL         ?= install
+ INSTALL_PROGRAM ?= $(INSTALL) -m 555 -s
+@@ -14,9 +14,9 @@
+ INSTALL_DATA    ?= $(INSTALL) -m 444
+ 
+ 
+-SDL_CONFIG  ?= sdl-config
+-CFLAGS_SDL  ?= $(shell $(SDL_CONFIG) --cflags)
+-LDFLAGS_SDL ?= $(shell $(SDL_CONFIG) --libs)
++SDL_CONFIG  ?= pkg-config
++CFLAGS_SDL  ?= $(shell $(SDL_CONFIG) sdl --cflags)
++LDFLAGS_SDL ?= $(shell $(SDL_CONFIG) sdl --libs)
+ 
+ 
+ CFLAGS += $(CFLAGS_SDL)
+@@ -29,10 +29,10 @@
+ CFLAGS += -Wcast-align
+ 
+ 
+-ifdef DATADIR
+-    CFLAGS += -DDATADIR=\"$(DATADIR)\"
+-endif
+-
++ifdef DATADIR
++    CFLAGS += -DDATADIR=\"$(DATADIR)\"
++endif
++
+ CCFLAGS += $(CFLAGS)
+ CCFLAGS += -std=gnu99
+ CCFLAGS += -Werror-implicit-function-declaration
+@@ -117,4 +117,4 @@
+ 	@echo '===> INSTALL'
+ 	$(Q)$(INSTALL) -d $(PREFIX)/bin
+ 	$(Q)$(INSTALL_PROGRAM) $(BINARY) $(PREFIX)/bin
+-	$(Q)$(INSTALL_MAN) $(MANPAGE) $(MANPREFIX)/man6
++	$(Q)$(INSTALL_MAN) $(MANPAGE) $(MANPREFIX)/man6
