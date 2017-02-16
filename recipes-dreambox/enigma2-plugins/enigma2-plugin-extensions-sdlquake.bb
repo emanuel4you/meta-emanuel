@@ -8,7 +8,7 @@ PACKAGE_ARCH = "${DEFAULTTUNE}"
 SOURCE = "https://github.com/emanuel4you/meta-emanuel"
 
 PV = "0.1"
-PR = "r0"
+PR = "r1"
 PN = "enigma2-plugin-extensions-sdlquake"
 
 RDEPENDS_${PN} += "sdlquake \
@@ -23,5 +23,5 @@ FILES_${PN} += "/usr/lib/enigma2/python/Plugins/Extensions/SDLQuake"
 inherit autotools-brokensep
 
 pkg_postrm_${PN}() {
-rm -rf /usr/lib/enigma2/python/Plugins/Extensions/SDLScummvm
+rm -rf /usr/lib/enigma2/python/Plugins/Extensions/SDLQuake
 }
