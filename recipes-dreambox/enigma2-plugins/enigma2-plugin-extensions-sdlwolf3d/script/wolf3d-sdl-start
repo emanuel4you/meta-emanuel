@@ -23,7 +23,6 @@ export SDL_DEBUG=${DEBUG}
 
 fbset -depth 16
 
-cd /usr/bin
-/usr/bin/${EXE} -basedir /usr/share/games/wolf3d
+/usr/bin/${EXE}
 
 exit 0
