@@ -6,19 +6,19 @@ SECTION = "emulators"
 PRIORITY = "optional"
 DEPENDS = "virtual/libsdl"
 
+RDEPENDS_${PN} += "zlib"
+
 LIC_FILES_CHKSUM = "file://COPYING;md5=8ca43cbc842c2336e835926c2166c28b"
 LICENSE = "GPLv2"
 
-SRCREV="32d122935914526db3267903027e9077b0f4594b"
+SRCREV="9d7e1f4c964ba5b902d10a62422b140a6eb3da7d"
 BRANCH="master"
 
-PV = "1.0.4+git${SRCPV}"
-PR = "r1"
+PV = "1.0.5+git${SRCPV}"
+PR = "r0"
 PN = "gnuboy"
 
-
-SRC_URI += "git://github.com/rofl0r/gnuboy.git;protocol=https;branch=${BRANCH};tag=${SRCREV} \
-	file://pkg-sdl.patch \
+SRC_URI += "git://github.com/emanuel4you/gnuboy-dreambox.git;protocol=https;branch=${BRANCH};tag=${SRCREV} \
 "
 
 S = "${WORKDIR}/git"
@@ -28,15 +28,13 @@ inherit autotools-brokensep pkgconfig
 EXTRA_OECONF = " \
 	--with-sdl \
 "
-
-do_configure_prepend() {
- sed -i -e 's:LIBS="$LIBS -L/usr/local/lib -L/usr/X11R6/lib": :g' ${S}/configure.in
- sed -i -e 's:SYS_INCS = -I/usr/local/include @XINCS@ -I./sys/nix: :g' ${S}/Makefile.in
+do_compile() {
+	oe_runmake sdlgnuboy
 }
+
 
 do_install() {
 	install -d ${D}${bindir}
-#	install -m 0755 ${S}/fbgnuboy ${D}${bindir}/fbgnuboy
 	install -m 0755 ${S}/sdlgnuboy ${D}${bindir}/sdlgnuboy
 	install -d ${D}${docdir}/gnuboy
 	install -m 0644 ${S}/docs/CONFIG ${D}${docdir}/gnuboy/CONFIG
@@ -45,4 +43,3 @@ do_install() {
 	install -m 0644 ${S}/etc/sample.rc ${D}${docdir}/gnuboy/sample.rc
 	install -m 0644 ${S}/etc/filters.rc ${D}${docdir}/gnuboy/filters.rc
 }
-
