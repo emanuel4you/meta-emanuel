@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from os import path as os_path
+from os import path as os_path, system as os_system
 from os import mkdir as os_mkdir
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS, copyfile
 from Plugins.Plugin import PluginDescriptor

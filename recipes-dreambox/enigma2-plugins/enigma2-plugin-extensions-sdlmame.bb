@@ -8,7 +8,7 @@ PACKAGE_ARCH = "${DEFAULTTUNE}"
 SOURCE = "https://github.com/emanuel4you/meta-emanuel"
 
 PV = "0.2"
-PR = "r5"
+PR = "r7"
 PN = "enigma2-plugin-extensions-sdlmame"
 
 RDEPENDS_${PN} += "advancemame (>= 3.2) \
