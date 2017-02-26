@@ -18,7 +18,7 @@ BRANCH="master"
 
 PN = "advancemame"
 PV = "3.2+git${SRCPV}"
-PR = "r1"
+PR = "r2"
 
 SRC_URI = "git://github.com/amadvance/advancemame.git;protocol=https;branch=${BRANCH};tag=${SRCREV} \
 	file://configure.patch \
@@ -35,13 +35,13 @@ do_configure_prepend() {
 	${S}/autogen.sh
 }
 
-EXTRA_OECONF = " \
-                 --enable-pthread \
-                 --docdir=${docdir}/advance/ \
-                 --enable-sdl \
-                 --enable-mevent \
-               "
-               
+EXTRA_OECONF = " --enable-sdl \
+		--enable-pthread \
+		--docdir=${docdir}/advance \
+		--disable-kevent \
+		--disable-mevent \
+		--disable-jevent \
+"
 
 do_install() {
 	install -d ${D}${bindir}
