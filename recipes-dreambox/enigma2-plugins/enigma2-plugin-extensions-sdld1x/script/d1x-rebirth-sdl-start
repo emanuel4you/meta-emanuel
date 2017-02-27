@@ -1,0 +1,29 @@
+#!/bin/sh
+
+EMU="d1x-rebirth"
+NAME=`basename ${0}`
+LOG_FILE=/var/log/${EMU}.log
+
+# set DEBUG="1" to debug
+DEBUG="1"
+
+if [ "${DEBUG}" != "0" ];
+then
+	echo "*** ${NAME} `date` ***" > ${LOG_FILE}; cat /proc/bus/input/devices >> ${LOG_FILE}; cat $0 >> ${LOG_FILE}; set -x; exec >> ${LOG_FILE} 2>&1
+fi
+
+export DISPLAY=0
+export TERM="linux"
+export HOME="/root"
+export SDL_VIDEODRIVER="bcmfb"
+export SDL_BCMFB_ACCEL=0
+export SDL_AUDIODRIVER="alsa"
+export SDL_DEBUG=${DEBUG}
+
+#echo "U:720x576i-170" > /sys/class/graphics/fb0/mode
+
+fbset -depth 16
+
+/usr/bin/${EMU} -verbose -16bpp -nodoublebuffer -showmeminfo -autodemo
+
+exit 0
