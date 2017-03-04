@@ -6,6 +6,10 @@ config.plugins.stella = ConfigSubsection()
 config.plugins.stella.romlocation = ConfigDirectory(default='/media/')
 config.plugins.stella.romlocation.save()
 
+def stella_norom(session, **kwargs):
+	from stella import Stella
+	session.open(Stella,"")
+
 def main(session, **kwargs):
 	
 	def playCallBack(rom=None):
@@ -21,4 +25,23 @@ def main(session, **kwargs):
 	session.openWithCallback(playCallBack, GameBrowser, filter="^.*\.(bin|BIN)", name="Stella")
 	
 def Plugins(**kwargs):
-	return [PluginDescriptor(name=_("Stella"), description=_("Atari Emulator for dreambox"), icon="g3icon_stella.png", where = PluginDescriptor.WHERE_EXTENSIONSMENU,fnc=main), PluginDescriptor(name=_("Stella"), description=_("Atari Emulator for dreambox"), icon="stella.png", where=PluginDescriptor.WHERE_PLUGINMENU, fnc=main)]
+	return [
+		PluginDescriptor(name=_("Stella LOAD"),
+		   description=_("Atari Emulator for dreambox"),
+		   icon="g3icon_stella.png",
+		   where = PluginDescriptor.WHERE_EXTENSIONSMENU,fnc=main),
+		PluginDescriptor(name=_("Stella LOAD"),
+		   description=_("Atari Emulator for dreambox"),
+		   icon="stella.png",
+		   where=PluginDescriptor.WHERE_PLUGINMENU,
+		   fnc=main),
+		PluginDescriptor(name=_("Stella"),
+		   description=_("Atari Emulator for dreambox"),
+		   icon="g3icon_stella.png",
+		   where = PluginDescriptor.WHERE_EXTENSIONSMENU,fnc=stella_norom),
+		PluginDescriptor(name=_("Stella"),
+		   description=_("Atari Emulator for dreambox"),
+		   icon="stella.png",
+		   where=PluginDescriptor.WHERE_PLUGINMENU,
+		   fnc=stella_norom),
+		]

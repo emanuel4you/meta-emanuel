@@ -8,7 +8,7 @@ PACKAGE_ARCH = "${DEFAULTTUNE}"
 SOURCE = "https://github.com/emanuel4you/meta-emanuel"
 
 PV = "0.2"
-PR = "r2"
+PR = "r3"
 PN = "enigma2-plugin-extensions-sdlstella"
 
 RDEPENDS_${PN} += "stella \

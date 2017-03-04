@@ -20,7 +20,7 @@ export SDL_VIDEODRIVER="bcmfb"
 export SDL_BCMFB_ACCEL=0
 export SDL_AUDIODRIVER="alsa"
 export SDL_DEBUG=${DEBUG}
-export SDL_NOMOUSE=1
+#export SDL_NOMOUSE=1
 
 fbset -depth 16
 
@@ -28,8 +28,7 @@ if [ "${ROM}" != "" ];
 then
 	/usr/bin/${EXE} "${ROM}"
 else
-	echo "${NAME}: no rom found! - exit"
-	exit 1
+	/usr/bin/${EXE}
 fi
 
 exit 0

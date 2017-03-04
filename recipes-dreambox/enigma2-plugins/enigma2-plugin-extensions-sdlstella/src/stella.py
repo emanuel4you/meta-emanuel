@@ -22,7 +22,7 @@ loadSkin(resolveFilename(SCOPE_PLUGINS, "Extensions/GameBrowser/skin.xml"))
 
 #-----------------------------------------------------------------------------------
 class Stella(Screen, ServiceStopScreen):
-	def __init__(self, session, rom):
+	def __init__(self, session, rom=""):
 		Screen.__init__(self, session)
 		ServiceStopScreen.__init__(self)
 		self.__rom = rom
