@@ -1,0 +1,27 @@
+diff -Nur stella-3.9.3/src/common/FrameBufferSoft.cxx stella-3.9.3.new/src/common/FrameBufferSoft.cxx
+--- stella-3.9.3/src/common/FrameBufferSoft.cxx	2014-01-18 00:34:03.000000000 +0100
++++ stella-3.9.3.new/src/common/FrameBufferSoft.cxx	2017-03-04 16:22:09.000000000 +0100
+@@ -148,7 +148,7 @@
+ void FrameBufferSoft::invalidate()
+ {
+   if(myScreen)
+-    SDL_FillRect(myScreen, NULL, 0);
++    SDL_UpdateRect(myScreen, 0, 0, 0, 0);
+ }
+ 
+ // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+diff -Nur stella-3.9.3/src/emucore/EventHandler.cxx stella-3.9.3.new/src/emucore/EventHandler.cxx
+--- stella-3.9.3/src/emucore/EventHandler.cxx	2014-01-18 00:34:03.000000000 +0100
++++ stella-3.9.3.new/src/emucore/EventHandler.cxx	2017-03-04 16:32:56.000000000 +0100
+@@ -671,7 +671,10 @@
+           mySkipMouseMotion = false;
+         }
+         else if(myOverlay)
+-          myOverlay->handleMouseMotionEvent(event.motion.x, event.motion.y, 0);
++          {
++            myOverlay->handleMouseMotionEvent(event.motion.x, event.motion.y, 0);
++            myOSystem->frameBuffer().refresh();
++          }
+ 
+         break;  // SDL_MOUSEMOTION
+ 

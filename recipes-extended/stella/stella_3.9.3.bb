@@ -3,13 +3,14 @@ HOMEPAGE = "http://stella.sourceforge.net/"
 SECTION = "emulators"
 PRIORITY = "optional"
 
-PR = "r1"
+PR = "r2"
 
 LICENSE = "GPLv2" 
 LIC_FILES_CHKSUM = "file://License.txt;md5=878e3965c7b52d85827c75f5a2f3b314" 
 
 SRC_URI = "http://sourceforge.net/projects/stella/files/stella/${PV}/stella-${PV}-src.tar.gz \
            file://cross_compile_support.patch \
+           file://fix-redraw.patch \
            file://0001-set-freq-48000.patch;patch=1 \
 "
 
