@@ -12,7 +12,7 @@ SRCREV = "5387b99d32fc5bac39c87defcb0abbf1018d8083"
 BRANCH="master"
 
 PV = "1.7+git${SRCPV}"
-PR = "r0"
+PR = "r1"
 
 SRC_URI = "git://github.com/mozzwald/wolf4sdl.git;protocol=https;branch=${BRANCH};tag=${SRCREV} \
 	file://dreambox.patch \
