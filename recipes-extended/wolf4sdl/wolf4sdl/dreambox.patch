@@ -1,18 +1,6 @@
-diff -Nur wolf4sdl/id_vl.cpp wolf4sdl.new/id_vl.cpp
---- wolf4sdl/id_vl.cpp	2015-04-17 03:23:41.000000000 +0200
-+++ wolf4sdl.new/id_vl.cpp	2017-02-15 00:17:55.009509158 +0100
-@@ -109,7 +109,7 @@
-     }
- 
-     screen = SDL_SetVideoMode(screenWidth, screenHeight, screenBits,
--          (usedoublebuffering ? SDL_HWSURFACE | SDL_DOUBLEBUF : 0)
-+          (usedoublebuffering ? SDL_HWSURFACE  : 0)
-         | (screenBits == 8 ? SDL_HWPALETTE : 0)
-         | (fullscreen ? SDL_FULLSCREEN : 0));
-     if(!screen)
-diff -Nur wolf4sdl/Makefile wolf4sdl.new/Makefile
---- wolf4sdl/Makefile	2015-04-17 03:23:41.000000000 +0200
-+++ wolf4sdl.new/Makefile	2017-02-15 00:04:47.757538412 +0100
+diff -Nur git.old/Makefile git/Makefile
+--- git.old/Makefile	2017-03-05 03:34:26.000000000 +0100
++++ git/Makefile	2017-03-05 03:34:58.585478950 +0100
 @@ -3,10 +3,10 @@
  
  
