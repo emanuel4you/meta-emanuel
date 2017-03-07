@@ -6,18 +6,23 @@ openembedded meta-layer for dreambox (dm52X, dm820, dm900, dm7080)
 Enigma2 Game Emulators:
 -----------------------
 advancemame
+dgen
 dosbox
+dxx-rebirth
+fbzx
 gngeo
+gnuboy
+opentyrian
 pcsx_rearmed
+scummvm
 sdlquake
 snes
-vice
-dgen
-fbzx
-gnuboy
-scummvm
 stella
+uae4arm
+vice
+visualboyadvance
 wolf4sdl
+
 
 recipes-devtools:
 -----------------------
