@@ -1,3 +1,3 @@
 installdir = $(bindir)
 
-install_SCRIPTS = advmame-sdl-start advmess-sdl-start advmenu-sdl-start
+install_SCRIPTS = advmame-sdl-start advmess-sdl-start advmenu-sdl-start Zelda.mess

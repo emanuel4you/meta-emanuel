@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# nes emulation example
+# http://www.mess.org/start?do=search&id=nes
+#
+
+DEBUG="--log"
+
+EMU="advmess"
+BIOS="nes"
+ARGS="-cart"
+ROM="/media/hdd/rom/zelda.nes"
+
+/usr/bin/${EMU} ${BIOS} ${ARGS} "${ROM}" ${DEBUG}
+
+exit 0

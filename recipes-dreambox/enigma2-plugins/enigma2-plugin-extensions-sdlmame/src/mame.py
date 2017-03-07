@@ -44,11 +44,15 @@ class Mame(Screen, ServiceStopScreen):
 	def __initRom(self):
 		if self.__rom is None:
 			return None
-		path = "/root/.advance/rom/" + os_path.basename(self.__rom)
-		if not os_path.exists(path):
-			copyfile(self.__rom, path)
-			sleep(1)
-		return os_path.basename(self.__rom.replace(".zip",""))
+		if  self.name == "MESS" and (self.__rom.endswith(".mess") or self.__rom.endswith(".nes")):
+			return self.__rom
+		else:
+			path = "/root/.advance/rom/" + os_path.basename(self.__rom)
+			if not os_path.exists(path):
+				copyfile(self.__rom, path)
+				sleep(1)
+				
+			return os_path.basename(self.__rom.replace(".zip",""))
 		
 	def __runEmu(self,rom):
 		print "[%s] - __runEmu"%self.name, rom

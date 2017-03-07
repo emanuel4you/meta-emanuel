@@ -1,7 +1,7 @@
 #!/bin/sh
 
 EXE="advmess"
-ROM=$1
+ARGS=$1
 NAME=`basename ${0}`
 LOG_FILE=/var/log/${NAME}.log
 
@@ -28,14 +28,21 @@ export SDL_NOMOUSE=1
 
 fbset -depth 16
 
-if [ "${ROM}" != "" ];
+if [ "${ARGS}" != "" ];
 then
-	if [ "${DEBUG}" >= "2" ];
+	if [[ $ARGS == *.mess ]];
 	then
-		/usr/bin/${EXE} "${ROM}" --log
+		/bin/sh ${ARGS}
 	else
-		/usr/bin/${EXE} "${ROM}"
+		if [[ $ARGS == *.nes ]];
+		then
+			/usr/bin/${EXE} nes -cart "${ARGS}"
+		else
+			/usr/bin/${EXE} "${ARGS}"
+		fi
+		
 	fi
+
 else
 	echo "${NAME}: no rom found! - exit"
 	exit 1
@@ -45,6 +52,5 @@ if [ -f "/=" ];
 then
 	rm -f /=
 fi
-
 
 exit 0
