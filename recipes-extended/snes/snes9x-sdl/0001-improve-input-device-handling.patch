@@ -1,0 +1,181 @@
+From 811d686ce947945c4c3385d6fb9302627c839e76 Mon Sep 17 00:00:00 2001
+From: Stephan Reichholf <reichi@opendreambox.org>
+Date: Sun, 12 Feb 2017 12:52:57 +0100
+Subject: [PATCH] improve input device handling
+
+---
+ sdl/sdlinput.cpp | 131 +++++++++++++++++++++++++++++++++++++++----------------
+ 1 file changed, 94 insertions(+), 37 deletions(-)
+
+diff --git a/sdl/sdlinput.cpp b/sdl/sdlinput.cpp
+index 156d392..438821e 100644
+--- a/sdl/sdlinput.cpp
++++ b/sdl/sdlinput.cpp
+@@ -246,45 +246,102 @@ void S9xParseInputConfig (ConfigFile &conf, int pass)
+ 	keymaps.clear();
+ 	if (!conf.GetBool("Unix::ClearAllControls", false))
+ 	{
+-		// Using 'Joypad# Axis'
++		//Pad 1
+ 		keymaps.push_back(strpair_t("J00:Axis0",      "Joypad1 Axis Left/Right T=50%"));
+ 		keymaps.push_back(strpair_t("J00:Axis1",      "Joypad1 Axis Up/Down T=50%"));
+-
+-		keymaps.push_back(strpair_t("J00:B0",         "Joypad1 X"));
+-		keymaps.push_back(strpair_t("J00:B1",         "Joypad1 A"));
+-		keymaps.push_back(strpair_t("J00:B2",         "Joypad1 B"));
++		keymaps.push_back(strpair_t("J00:B0",         "Joypad1 A"));
++		keymaps.push_back(strpair_t("J00:B1",         "Joypad1 B"));
++		keymaps.push_back(strpair_t("J00:B2",         "Joypad1 X"));
+ 		keymaps.push_back(strpair_t("J00:B3",         "Joypad1 Y"));
+-
+-		keymaps.push_back(strpair_t("J00:B6",         "Joypad1 L"));
+-		keymaps.push_back(strpair_t("J00:B7",         "Joypad1 R"));
+-		keymaps.push_back(strpair_t("J00:B8",         "Joypad1 Select"));
+-		keymaps.push_back(strpair_t("J00:B11",        "Joypad1 Start"));
+-		keymaps.push_back(strpair_t("K00:SDLK_RIGHT",        "Joypad1 Right"));
+-		keymaps.push_back(strpair_t("K00:SDLK_LEFT",         "Joypad1 Left"));
+-		keymaps.push_back(strpair_t("K00:SDLK_DOWN",         "Joypad1 Down"));
+-		keymaps.push_back(strpair_t("K00:SDLK_UP",           "Joypad1 Up"));
+-		keymaps.push_back(strpair_t("K00:SDLK_RETURN",       "Joypad1 Start"));
+-		keymaps.push_back(strpair_t("K00:SDLK_SPACE",        "Joypad1 Select"));
+-		keymaps.push_back(strpair_t("K00:SDLK_d",            "Joypad1 A"));
+-		keymaps.push_back(strpair_t("K00:SDLK_c",            "Joypad1 B"));
+-		keymaps.push_back(strpair_t("K00:SDLK_s",            "Joypad1 X"));
+-		keymaps.push_back(strpair_t("K00:SDLK_x",            "Joypad1 Y"));
+-		keymaps.push_back(strpair_t("K00:SDLK_a",            "Joypad1 L"));
+-		keymaps.push_back(strpair_t("K00:SDLK_z",            "Joypad1 R"));
+-
++		keymaps.push_back(strpair_t("J00:B4",         "Joypad1 L"));
++		keymaps.push_back(strpair_t("J00:B5",         "Joypad1 R"));
++		keymaps.push_back(strpair_t("J00:B6",         "Joypad1 Select"));
++		keymaps.push_back(strpair_t("J00:B7",         "Joypad1 Start"));
++		//Pad 2
++		keymaps.push_back(strpair_t("J01:Axis0",      "Joypad2 Axis Left/Right T=50%"));
++		keymaps.push_back(strpair_t("J01:Axis1",      "Joypad2 Axis Up/Down T=50%"));
++		keymaps.push_back(strpair_t("J01:B0",         "Joypad2 A"));
++		keymaps.push_back(strpair_t("J01:B1",         "Joypad2 B"));
++		keymaps.push_back(strpair_t("J01:B2",         "Joypad2 X"));
++		keymaps.push_back(strpair_t("J01:B3",         "Joypad2 Y"));
++		keymaps.push_back(strpair_t("J01:B4",         "Joypad2 L"));
++		keymaps.push_back(strpair_t("J01:B5",         "Joypad2 R"));
++		keymaps.push_back(strpair_t("J01:B6",         "Joypad2 Select"));
++		keymaps.push_back(strpair_t("J01:B7",         "Joypad2 Start"));
++		//Keyboard
++		keymaps.push_back(strpair_t("K00:Right",        "Joypad1 Right"));
++		keymaps.push_back(strpair_t("K00:Left",         "Joypad1 Left"));
++		keymaps.push_back(strpair_t("K00:Down",         "Joypad1 Down"));
++		keymaps.push_back(strpair_t("K00:Up",           "Joypad1 Up"));
++		keymaps.push_back(strpair_t("K00:Return",       "Joypad1 Start"));
++		keymaps.push_back(strpair_t("K00:Space",        "Joypad1 Select"));
++		keymaps.push_back(strpair_t("K00:d",            "Joypad1 A"));
++		keymaps.push_back(strpair_t("K00:c",            "Joypad1 B"));
++		keymaps.push_back(strpair_t("K00:s",            "Joypad1 X"));
++		keymaps.push_back(strpair_t("K00:x",            "Joypad1 Y"));
++		keymaps.push_back(strpair_t("K00:a",            "Joypad1 L"));
++		keymaps.push_back(strpair_t("K00:z",            "Joypad1 R"));
+ 		// domaemon: *) GetSDLKeyFromName().
+-		name_sdlkeysym["SDLK_s"] = SDLK_s;
+-		name_sdlkeysym["SDLK_d"] = SDLK_d;
+-		name_sdlkeysym["SDLK_x"] = SDLK_x;
+-		name_sdlkeysym["SDLK_c"] = SDLK_c;
+-		name_sdlkeysym["SDLK_a"] = SDLK_a;
+-		name_sdlkeysym["SDLK_z"] = SDLK_z;
+-		name_sdlkeysym["SDLK_UP"] = SDLK_UP;
+-		name_sdlkeysym["SDLK_DOWN"] = SDLK_DOWN;
+-		name_sdlkeysym["SDLK_RIGHT"] = SDLK_RIGHT;
+-		name_sdlkeysym["SDLK_LEFT"] = SDLK_LEFT;
+-		name_sdlkeysym["SDLK_RETURN"] = SDLK_RETURN;
+-		name_sdlkeysym["SDLK_SPACE"] = SDLK_SPACE;
++		// Numbers
++		name_sdlkeysym["0"] = SDLK_0;
++		name_sdlkeysym["1"] = SDLK_1;
++		name_sdlkeysym["2"] = SDLK_2;
++		name_sdlkeysym["3"] = SDLK_4;
++		name_sdlkeysym["4"] = SDLK_4;
++		name_sdlkeysym["5"] = SDLK_5;
++		name_sdlkeysym["6"] = SDLK_6;
++		name_sdlkeysym["7"] = SDLK_7;
++		name_sdlkeysym["8"] = SDLK_8;
++		name_sdlkeysym["9"] = SDLK_9;
++		// Letters
++		name_sdlkeysym["a"] = SDLK_a;
++		name_sdlkeysym["b"] = SDLK_b;
++		name_sdlkeysym["b"] = SDLK_c;
++		name_sdlkeysym["d"] = SDLK_d;
++		name_sdlkeysym["e"] = SDLK_e;
++		name_sdlkeysym["f"] = SDLK_f;
++		name_sdlkeysym["g"] = SDLK_g;
++		name_sdlkeysym["h"] = SDLK_h;
++		name_sdlkeysym["i"] = SDLK_i;
++		name_sdlkeysym["j"] = SDLK_j;
++		name_sdlkeysym["k"] = SDLK_k;
++		name_sdlkeysym["l"] = SDLK_l;
++		name_sdlkeysym["m"] = SDLK_m;
++		name_sdlkeysym["n"] = SDLK_n;
++		name_sdlkeysym["o"] = SDLK_o;
++		name_sdlkeysym["p"] = SDLK_p;
++		name_sdlkeysym["q"] = SDLK_q;
++		name_sdlkeysym["r"] = SDLK_r;
++		name_sdlkeysym["s"] = SDLK_s;
++		name_sdlkeysym["t"] = SDLK_t;
++		name_sdlkeysym["u"] = SDLK_u;
++		name_sdlkeysym["v"] = SDLK_v;
++		name_sdlkeysym["w"] = SDLK_w;
++		name_sdlkeysym["x"] = SDLK_x;
++		name_sdlkeysym["y"] = SDLK_y;
++		name_sdlkeysym["z"] = SDLK_z;
++		// Arrows
++		name_sdlkeysym["Up"] = SDLK_UP;
++		name_sdlkeysym["Down"] = SDLK_DOWN;
++		name_sdlkeysym["Right"] = SDLK_RIGHT;
++		name_sdlkeysym["Left"] = SDLK_LEFT;
++		// Command Keys
++		name_sdlkeysym["Return"] = SDLK_RETURN;
++		name_sdlkeysym["space"] = SDLK_SPACE;
++		name_sdlkeysym["Pause"] = SDLK_PAUSE;
++		// F1-F12
++		name_sdlkeysym["F1"] = SDLK_F1;
++		name_sdlkeysym["F2"] = SDLK_F2;
++		name_sdlkeysym["F3"] = SDLK_F3;
++		name_sdlkeysym["F4"] = SDLK_F4;
++		name_sdlkeysym["F5"] = SDLK_F5;
++		name_sdlkeysym["F6"] = SDLK_F6;
++		name_sdlkeysym["F7"] = SDLK_F7;
++		name_sdlkeysym["F8"] = SDLK_F8;
++		name_sdlkeysym["F9"] = SDLK_F9;
++		name_sdlkeysym["F10"] = SDLK_F10;
++		name_sdlkeysym["F11"] = SDLK_F11;
++		name_sdlkeysym["F12"] = SDLK_F12;
+ 	}
+ 
+ 	return;
+@@ -337,6 +394,7 @@ void S9xProcessEvents (bool8 block)
+ 		switch (event.type) {
+ 		case SDL_KEYDOWN:
+ 		case SDL_KEYUP:
++			printf (">>>> S9xReportButton SDL_KEY J%d %d\n", event.jbutton.which << 24, event.key.keysym.sym);
+ 			// domaemon: not sure it's the best idea, but reserving the SDLK_q for quit.
+ 			if (event.key.keysym.sym == SDLK_q)
+ 			{
+@@ -351,9 +409,9 @@ void S9xProcessEvents (bool8 block)
+ 			break;
+ 
+ /***** Joystick starts *****/
+-#if 0
+ 		case SDL_JOYBUTTONDOWN:
+ 		case SDL_JOYBUTTONUP:
++			printf (">>>> S9xReportButton SDL_JOY %d\n", event.jbutton.button);
+ 			S9xReportButton(0x80000000 | // joystick button
+ 					(event.jbutton.which << 24) | // joystick index
+ 					event.jbutton.button, // joystick button code
+@@ -366,7 +424,6 @@ void S9xProcessEvents (bool8 block)
+ 				      event.jaxis.axis, // joystick axis
+ 				      event.jaxis.value); // axis value
+ 			break;
+-#endif
+ /***** Joystick ends *****/
+ 
+ 		case SDL_QUIT:
+-- 
+2.7.4
+

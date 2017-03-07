@@ -18,7 +18,9 @@ PV = "1.53+git${SRCPV}"
 
 SRC_URI = "git://github.com/emanuel4you/snes9x-sdl.git;protocol=https;branch=${BRANCH};tag=${SRCREV} \
 	file://cross_compile.patch;striplevel=2 \
-	file://0001-improve-input-device-handling.patch;striplevel=2 \
+	file://001-enable-SDL-joystick.patch;striplevel=2 \
+	file://002-enable-debug_key.patch;striplevel=2 \
+	file://003-addkey.patch;striplevel=2 \
 "
 
 S = "${WORKDIR}/git/sdl"
