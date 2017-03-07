@@ -21,6 +21,8 @@ export SDL_BCMFB_ACCEL=0
 export SDL_AUDIODRIVER="alsa"
 export SDL_DEBUG=${DEBUG}
 
+echo "U:640x400i-257" > /sys/class/graphics/fb0/mode
+
 fbset -depth 16
 
 if [ "${ROM}" != "" ];
