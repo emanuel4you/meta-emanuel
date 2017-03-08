@@ -12,6 +12,7 @@ dxx-rebirth
 fbzx
 gngeo
 gnuboy
+mednafen
 opentyrian
 pcsx_rearmed
 scummvm
