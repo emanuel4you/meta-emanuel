@@ -1,0 +1,13 @@
+diff -Nur dosbox-0.74/src/gui/sdlmain.cpp dosbox-0.74.new/src/gui/sdlmain.cpp
+--- dosbox-0.74/src/gui/sdlmain.cpp	2017-03-08 13:49:37.194540084 +0100
++++ dosbox-0.74.new/src/gui/sdlmain.cpp	2017-03-08 13:52:37.578533381 +0100
+@@ -899,7 +899,8 @@
+ 			}
+ 			if (rectCount)
+ 				SDL_UpdateRects( sdl.surface, rectCount, sdl.updateRects );
+-		}
++		} else
++			SDL_UpdateRects( sdl.surface, 0, 0 );
+ 		break;
+ #if (HAVE_DDRAW_H) && defined(WIN32)
+ 	case SCREEN_SURFACE_DDRAW:

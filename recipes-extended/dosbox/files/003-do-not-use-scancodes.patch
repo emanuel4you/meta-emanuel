@@ -1,0 +1,12 @@
+diff -Nur dosbox-0.74/src/gui/sdlmain.cpp dosbox-0.74.new/src/gui/sdlmain.cpp
+--- dosbox-0.74/src/gui/sdlmain.cpp	2017-03-08 14:19:46.962472832 +0100
++++ dosbox-0.74.new/src/gui/sdlmain.cpp	2017-03-08 14:39:26.854428987 +0100
+@@ -1716,7 +1716,7 @@
+ 	Pstring = sdl_sec->Add_path("mapperfile",Property::Changeable::Always,MAPPERFILE);
+ 	Pstring->Set_help("File used to load/save the key/event mappings from. Resetmapper only works with the default value.");
+ 
+-	Pbool = sdl_sec->Add_bool("usescancodes",Property::Changeable::Always,true);
++	Pbool = sdl_sec->Add_bool("usescancodes",Property::Changeable::Always,false);
+ 	Pbool->Set_help("Avoid usage of symkeys, might not work on all operating systems.");
+ }
+ 

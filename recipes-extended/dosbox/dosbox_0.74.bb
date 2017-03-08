@@ -18,10 +18,12 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=94d55d512a9ba36caa9b7df079bae19f"
 
 
 SRC_URI = "${SOURCEFORGE_MIRROR}/dosbox/dosbox-0.74.tar.gz \
-	file://000-update-to-74-2.patch \
+	file://001-trunk.patch \
+	file://002-add-manual-blit.patch \
+	file://003-do-not-use-scancodes.patch \
 	file://pkg-sdl.patch \
 "
 
 S = "${WORKDIR}/dosbox-0.74"
 
-PR = "r5"
+PR = "r6"
