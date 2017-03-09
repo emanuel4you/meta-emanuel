@@ -5,7 +5,7 @@ SECTION = "emulators"
 LICENSE = "GPLv3" 
 LIC_FILES_CHKSUM = "file://COPYING;md5=6e233eda45c807aa29aeaa6d94bc48a2"
 
-SRCREV="ffdafe23387a0d1482699723b4b2d491d799fa73"
+SRCREV="94f77eb49f9e38839b14d3f7b9f76afccd7fcf93"
 BRANCH="master"
 
 PV = "0.9.43+git${SRCPV}"
