@@ -21,9 +21,7 @@ DEPENDS = "libsdl \
 	jack \
 	libsndfile1 \
 	"
-
-# large file support was generating a cross-compiling issue where sizeof(off_t) was 
-# returning 64 instead of 32, so we are disabling it for now
-#EXTRA_OECONF += "--disable-largefile"
+	
+EXTRA_OECONF += "--disable-opengl"
 
 inherit autotools-brokensep gettext
