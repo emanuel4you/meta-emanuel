@@ -1,25 +1,18 @@
-PR = "r7"
+SRCREV="132e1e1984267f316c587957fdd1315c67527ff3"
+BRANCH="release-1.2.15"
 
-SRC_URI += "\
-    file://bcmfb.patch \
+PV = "1.2.15+git${SRCPV}"
+
+PR = "r0"
+
+SRC_URI = "git://github.com/opendreambox/SDL-mirror.git;protocol=https;branch=${BRANCH};tag=${SRCREV} \
+           file://libsdl-1.2.15-xdata32.patch \
+           file://pkgconfig.patch \
 "
 
-EXTRA_OECONF = "--disable-static --enable-cdrom --enable-threads --enable-timers \
-                --enable-file --disable-oss --disable-esd --disable-arts \
-                --disable-diskaudio --disable-nas --disable-esd-shared --disable-esdtest \
-                --disable-mintaudio --disable-nasm --disable-video-dga \
-                --enable-video-bcmfb --disable-video-ps2gs --disable-video-ps3 \
-                --disable-video-dummy \
-                --enable-input-events --disable-input-tslib --enable-pthreads \
-                --disable-video-fbcon \
-                --disable-video-directfb \
-                --disable-video-opengl \
-                --disable-video-x11 \
-                --disable-video-svga \
-                --disable-video-picogui --disable-video-qtopia \
-                --disable-rpath \
-                --disable-pulseaudio \
+S = "${WORKDIR}/git"
+
+EXTRA_OECONF += "--enable-video-bcmfb \
 "
 
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
-
+FILESEXTRAPATHS_prepend := "${THISDIR}/../../../openembedded-core/meta/recipes-graphics/libsdl/libsdl-1.2.15:"

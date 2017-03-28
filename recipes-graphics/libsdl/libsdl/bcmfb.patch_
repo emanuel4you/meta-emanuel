@@ -1,8 +1,7 @@
-diff --git a/configure.in b/configure.in
-index 08c8e1e..3872e0c 100644
---- a/configure.in
-+++ b/configure.in
-@@ -1252,6 +1252,60 @@ AC_HELP_STRING([--enable-video-fbcon], [use framebuffer console video driver [[d
+diff -Nur SDL-1.2.15/configure.in SDL-1.2.15.new/configure.in
+--- SDL-1.2.15/configure.in	2012-01-19 07:30:05.000000000 +0100
++++ SDL-1.2.15.new/configure.in	2017-03-05 02:23:52.241637489 +0100
+@@ -1252,6 +1252,60 @@
      fi
  }
  
@@ -63,7 +62,7 @@ index 08c8e1e..3872e0c 100644
  dnl Find DirectFB
  CheckDirectFB()
  {
-@@ -2363,6 +2417,7 @@ case "$host" in
+@@ -2363,6 +2417,7 @@
          CheckX11
          CheckNANOX
          CheckFBCON
@@ -71,10 +70,9 @@ index 08c8e1e..3872e0c 100644
          CheckDirectFB
          CheckPS2GS
          CheckPS3
-diff --git a/include/SDL_config.h.in b/include/SDL_config.h.in
-index 8bb1773..8b8d663 100644
---- a/include/SDL_config.h.in
-+++ b/include/SDL_config.h.in
+diff -Nur SDL-1.2.15/include/SDL_config.h.in SDL-1.2.15.new/include/SDL_config.h.in
+--- SDL-1.2.15/include/SDL_config.h.in	2012-01-19 07:30:05.000000000 +0100
++++ SDL-1.2.15.new/include/SDL_config.h.in	2017-03-05 02:23:52.241637489 +0100
 @@ -263,6 +263,7 @@
  #undef SDL_VIDEO_DRIVER_DRAWSPROCKET
  #undef SDL_VIDEO_DRIVER_DUMMY
@@ -83,123 +81,9 @@ index 8bb1773..8b8d663 100644
  #undef SDL_VIDEO_DRIVER_GAPI
  #undef SDL_VIDEO_DRIVER_GEM
  #undef SDL_VIDEO_DRIVER_GGI
-diff --git a/src/video/SDL_surface.c b/src/video/SDL_surface.c
-index 0f3ad12..d8aafe2 100644
---- a/src/video/SDL_surface.c
-+++ b/src/video/SDL_surface.c
-@@ -29,6 +29,49 @@
- #include "SDL_pixels_c.h"
- #include "SDL_leaks.h"
- 
-+#include "SDL_surface.h"
-+
-+/* check bcm accel */
-+int bcm_can_accel(SDL_Surface *dst) {
-+	int stride, height, bpp;
-+	bpp = dst->format->BitsPerPixel;
-+	height = dst->h;
-+	stride = dst->w * bpp/8;
-+	if (((bpp == 8) || (bpp == 16) || (bpp == 32)) && (stride > 48)) {
-+		switch (bpp)
-+		{
-+			case 8:
-+				if ((height * stride) > 12000) {
-+					break;
-+				}
-+				else {
-+					fprintf(stderr, "FillHWRect is no candidate for accel (height * stride) %d < 12000\n", (height * stride));
-+					return(0);
-+				}
-+			case 16:
-+				if ((height * stride) > 32000) {
-+					break;
-+				}
-+				else {
-+					fprintf(stderr, "FillHWRect is no candidate for accel (height * stride) %d < 32000\n", (height * stride));
-+					return(0);
-+				}
-+			case 32:
-+				if ((height * stride) > 48000) {
-+					break;
-+				}
-+				else {
-+					fprintf(stderr, "FillHWRect is no candidate for accel (height * stride) %d < 48000\n", (height * stride));
-+					return(0);
-+				}
-+			default:
-+				fprintf(stderr, "FillHWRect is no candidate for accel\n");
-+				return(0);
-+		}
-+		return (1);
-+	}
-+	return(0);
-+}
- 
- /* Public routines */
- /*
-@@ -585,7 +628,7 @@ int SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, Uint32 color)
- 
- 	/* Check for hardware acceleration */
- 	if ( ((dst->flags & SDL_HWSURFACE) == SDL_HWSURFACE) &&
--					video->info.blit_fill ) {
-+					video->info.blit_fill && bcm_can_accel(dst)) {
- 		SDL_Rect hw_rect;
- 		if ( dst == SDL_VideoSurface ) {
- 			hw_rect = *dstrect;
-diff --git a/src/video/SDL_surface.h b/src/video/SDL_surface.h
-new file mode 100644
-index 0000000..c6ba718
---- /dev/null
-+++ b/src/video/SDL_surface.h
-@@ -0,0 +1,15 @@
-+/* bcmfb based SDL video driver implementation.
-+*  SDL - Simple DirectMedia Layer
-+*  Copyright (C) 1997-2012 Sam Lantinga
-+*  
-+*  SDL bcmfb backend
-+*  Copyright (C) 2016 Emanuel Strobel
-+*/
-+#include "SDL_config.h"
-+
-+#ifndef _SDL_surface_h
-+#define _SDL_surface_h
-+
-+extern int bcm_can_accel(SDL_Surface *dst);
-+
-+#endif /* _SDL_sysvideo_h */
-diff --git a/src/video/SDL_sysvideo.h b/src/video/SDL_sysvideo.h
-index 436450e..9627ac6 100644
---- a/src/video/SDL_sysvideo.h
-+++ b/src/video/SDL_sysvideo.h
-@@ -341,6 +341,9 @@ extern VideoBootStrap WSCONS_bootstrap;
- #if SDL_VIDEO_DRIVER_FBCON
- extern VideoBootStrap FBCON_bootstrap;
- #endif
-+#if SDL_VIDEO_DRIVER_BCMFB
-+extern VideoBootStrap BCMFB_bootstrap;
-+#endif
- #if SDL_VIDEO_DRIVER_DIRECTFB
- extern VideoBootStrap DirectFB_bootstrap;
- #endif
-diff --git a/src/video/SDL_video.c b/src/video/SDL_video.c
-index 46285c9..7ff40d7 100644
---- a/src/video/SDL_video.c
-+++ b/src/video/SDL_video.c
-@@ -57,6 +57,9 @@ static VideoBootStrap *bootstrap[] = {
- #if SDL_VIDEO_DRIVER_FBCON
- 	&FBCON_bootstrap,
- #endif
-+#if SDL_VIDEO_DRIVER_BCMFB
-+	&BCMFB_bootstrap,
-+#endif
- #if SDL_VIDEO_DRIVER_DIRECTFB
- 	&DirectFB_bootstrap,
- #endif
-diff --git a/src/video/bcmfb/SDL_bcmfb.c b/src/video/bcmfb/SDL_bcmfb.c
-new file mode 100644
-index 0000000..1fe6792
---- /dev/null
-+++ b/src/video/bcmfb/SDL_bcmfb.c
+diff -Nur SDL-1.2.15/src/video/bcmfb/SDL_bcmfb.c SDL-1.2.15.new/src/video/bcmfb/SDL_bcmfb.c
+--- SDL-1.2.15/src/video/bcmfb/SDL_bcmfb.c	1970-01-01 01:00:00.000000000 +0100
++++ SDL-1.2.15.new/src/video/bcmfb/SDL_bcmfb.c	2017-03-05 02:23:52.241637489 +0100
 @@ -0,0 +1,436 @@
 +/* bcmfb based SDL video driver implementation.
 +*  SDL - Simple DirectMedia Layer
@@ -637,11 +521,9 @@ index 0000000..1fe6792
 +	this->info.blit_hw_CC = 1;
 +	this->SetHWColorKey = SetHWColorKey;
 +}
-diff --git a/src/video/bcmfb/SDL_bcmfb.h b/src/video/bcmfb/SDL_bcmfb.h
-new file mode 100644
-index 0000000..723585e
---- /dev/null
-+++ b/src/video/bcmfb/SDL_bcmfb.h
+diff -Nur SDL-1.2.15/src/video/bcmfb/SDL_bcmfb.h SDL-1.2.15.new/src/video/bcmfb/SDL_bcmfb.h
+--- SDL-1.2.15/src/video/bcmfb/SDL_bcmfb.h	1970-01-01 01:00:00.000000000 +0100
++++ SDL-1.2.15.new/src/video/bcmfb/SDL_bcmfb.h	2017-03-05 02:23:52.241637489 +0100
 @@ -0,0 +1,48 @@
 +/* bcmfb based SDL video driver implementation.
 +*  SDL - Simple DirectMedia Layer
@@ -691,11 +573,9 @@ index 0000000..723585e
 +extern int bcm_accel_has_alphablending();
 +
 +extern void BCMFB_Accel(_THIS, __u32 card);
-diff --git a/src/video/bcmfb/SDL_fbevents.c b/src/video/bcmfb/SDL_fbevents.c
-new file mode 100644
-index 0000000..c254c9c
---- /dev/null
-+++ b/src/video/bcmfb/SDL_fbevents.c
+diff -Nur SDL-1.2.15/src/video/bcmfb/SDL_fbevents.c SDL-1.2.15.new/src/video/bcmfb/SDL_fbevents.c
+--- SDL-1.2.15/src/video/bcmfb/SDL_fbevents.c	1970-01-01 01:00:00.000000000 +0100
++++ SDL-1.2.15.new/src/video/bcmfb/SDL_fbevents.c	2017-03-05 02:23:52.241637489 +0100
 @@ -0,0 +1,718 @@
 +/* bcmfb based SDL video driver implementation.
 +*  SDL - Simple DirectMedia Layer
@@ -725,8 +605,8 @@ index 0000000..c254c9c
 +#include "SDL_fbvideo.h"
 +#include "SDL_fbevents_c.h"
 +
-+//#define DEBUG_KEYBOARD
-+//#define DEBUG_MOUSE
++#//define DEBUG_KEYBOARD
++#//define DEBUG_MOUSE
 +
 +static int posted = 0;
 +static SDLKey KeyTranslate(unsigned short code, int type);
@@ -1415,11 +1295,9 @@ index 0000000..c254c9c
 +		default:		return SDLK_UNKNOWN;
 +	}
 +}
-diff --git a/src/video/bcmfb/SDL_fbevents_c.h b/src/video/bcmfb/SDL_fbevents_c.h
-new file mode 100644
-index 0000000..43f42f4
---- /dev/null
-+++ b/src/video/bcmfb/SDL_fbevents_c.h
+diff -Nur SDL-1.2.15/src/video/bcmfb/SDL_fbevents_c.h SDL-1.2.15.new/src/video/bcmfb/SDL_fbevents_c.h
+--- SDL-1.2.15/src/video/bcmfb/SDL_fbevents_c.h	1970-01-01 01:00:00.000000000 +0100
++++ SDL-1.2.15.new/src/video/bcmfb/SDL_fbevents_c.h	2017-03-05 02:23:52.241637489 +0100
 @@ -0,0 +1,24 @@
 +/* bcmfb based SDL video driver implementation.
 +*  SDL - Simple DirectMedia Layer
@@ -1445,11 +1323,9 @@ index 0000000..43f42f4
 +
 +extern void BCMFB_InitOSKeymap(_THIS);
 +extern void BCMFB_PumpEvents(_THIS);
-diff --git a/src/video/bcmfb/SDL_fbmouse.c b/src/video/bcmfb/SDL_fbmouse.c
-new file mode 100644
-index 0000000..d65f27e
---- /dev/null
-+++ b/src/video/bcmfb/SDL_fbmouse.c
+diff -Nur SDL-1.2.15/src/video/bcmfb/SDL_fbmouse.c SDL-1.2.15.new/src/video/bcmfb/SDL_fbmouse.c
+--- SDL-1.2.15/src/video/bcmfb/SDL_fbmouse.c	1970-01-01 01:00:00.000000000 +0100
++++ SDL-1.2.15.new/src/video/bcmfb/SDL_fbmouse.c	2017-03-05 02:23:52.241637489 +0100
 @@ -0,0 +1,33 @@
 +/*
 +    SDL - Simple DirectMedia Layer
@@ -1484,11 +1360,9 @@ index 0000000..d65f27e
 +struct WMcursor {
 +	int unused;
 +};
-diff --git a/src/video/bcmfb/SDL_fbmouse_c.h b/src/video/bcmfb/SDL_fbmouse_c.h
-new file mode 100644
-index 0000000..fbb031d
---- /dev/null
-+++ b/src/video/bcmfb/SDL_fbmouse_c.h
+diff -Nur SDL-1.2.15/src/video/bcmfb/SDL_fbmouse_c.h SDL-1.2.15.new/src/video/bcmfb/SDL_fbmouse_c.h
+--- SDL-1.2.15/src/video/bcmfb/SDL_fbmouse_c.h	1970-01-01 01:00:00.000000000 +0100
++++ SDL-1.2.15.new/src/video/bcmfb/SDL_fbmouse_c.h	2017-03-05 02:23:52.241637489 +0100
 @@ -0,0 +1,26 @@
 +/*
 +    SDL - Simple DirectMedia Layer
@@ -1516,12 +1390,10 @@ index 0000000..fbb031d
 +#include "SDL_fbvideo.h"
 +
 +/* Functions to be exported */
-diff --git a/src/video/bcmfb/SDL_fbvideo.c b/src/video/bcmfb/SDL_fbvideo.c
-new file mode 100644
-index 0000000..4b69f07
---- /dev/null
-+++ b/src/video/bcmfb/SDL_fbvideo.c
-@@ -0,0 +1,1797 @@
+diff -Nur SDL-1.2.15/src/video/bcmfb/SDL_fbvideo.c SDL-1.2.15.new/src/video/bcmfb/SDL_fbvideo.c
+--- SDL-1.2.15/src/video/bcmfb/SDL_fbvideo.c	1970-01-01 01:00:00.000000000 +0100
++++ SDL-1.2.15.new/src/video/bcmfb/SDL_fbvideo.c	2017-03-05 02:04:55.000000000 +0100
+@@ -0,0 +1,1798 @@
 +/* bcmfb based SDL video driver implementation.
 +*  SDL - Simple DirectMedia Layer
 +*  Copyright (C) 1997-2012 Sam Lantinga
@@ -1554,7 +1426,7 @@ index 0000000..4b69f07
 +#include "SDL_fbevents_c.h"
 +#include "SDL_bcmfb.h"
 +
-+//#define BCMFB_DEBUG
++#define BCMFB_DEBUG
 +#define BCMFB_ACCEL_DEBUG
 +
 +#ifndef FBIO_BLIT
@@ -2127,8 +1999,8 @@ index 0000000..4b69f07
 +		return(-1);
 +	}
 +	else {
-+		unsigned char x=1;
-+		ioctl(console_fd, FBIO_SET_MANUAL_BLIT, &x);
++		//unsigned char x=1;
++		//ioctl(console_fd, FBIO_SET_MANUAL_BLIT, &x);
 +	}
 +#ifdef BCMFB_DEBUG
 +	printf("VIDEO MEM          : 0x%8x (%dMB)\n", finfo.smem_len, (finfo.smem_len/1024/1024));
@@ -2940,6 +2812,7 @@ index 0000000..4b69f07
 +	flip_page = !flip_page;
 +
 +	surface->pixels = flip_address[flip_page];
++	//ioctl(console_fd, FBIO_BLIT);
 +	return(0);
 +}
 +
@@ -3006,7 +2879,7 @@ index 0000000..4b69f07
 +	if (!shadow_fb) {
 +		/* init blit */
 +		//fprintf(stderr,">> BCMFB_DirectUpdate blit");
-+		ioctl(console_fd, FBIO_BLIT);
++		//ioctl(console_fd, FBIO_BLIT);
 +		/* The application is already updating the visible video memory */
 +		return;
 +	}
@@ -3299,8 +3172,8 @@ index 0000000..4b69f07
 +
 +	/* Close console and input file descriptors */
 +	if ( console_fd > 0 ) {
-+		unsigned char x=0;
-+		ioctl(console_fd, FBIO_SET_MANUAL_BLIT, &x);
++		//unsigned char x=0;
++		//ioctl(console_fd, FBIO_SET_MANUAL_BLIT, &x);
 +		/* Unmap the video framebuffer and I/O registers */
 +		if ( mapped_mem ) {
 +			munmap(mapped_mem, mapped_memlen);
@@ -3319,11 +3192,9 @@ index 0000000..4b69f07
 +	BCMFB_CloseMouse(this);
 +	BCMFB_CloseKeyboard(this);
 +}
-diff --git a/src/video/bcmfb/SDL_fbvideo.h b/src/video/bcmfb/SDL_fbvideo.h
-new file mode 100644
-index 0000000..23af551
---- /dev/null
-+++ b/src/video/bcmfb/SDL_fbvideo.h
+diff -Nur SDL-1.2.15/src/video/bcmfb/SDL_fbvideo.h SDL-1.2.15.new/src/video/bcmfb/SDL_fbvideo.h
+--- SDL-1.2.15/src/video/bcmfb/SDL_fbvideo.h	1970-01-01 01:00:00.000000000 +0100
++++ SDL-1.2.15.new/src/video/bcmfb/SDL_fbvideo.h	2017-03-05 02:23:52.245637489 +0100
 @@ -0,0 +1,174 @@
 +/* bcmfb based SDL video driver implementation.
 +*  SDL - Simple DirectMedia Layer
@@ -3499,3 +3370,110 @@ index 0000000..23af551
 +}
 +
 +#endif /* _SDL_fbvideo_h */
+diff -Nur SDL-1.2.15/src/video/SDL_surface.c SDL-1.2.15.new/src/video/SDL_surface.c
+--- SDL-1.2.15/src/video/SDL_surface.c	2012-01-19 07:30:06.000000000 +0100
++++ SDL-1.2.15.new/src/video/SDL_surface.c	2017-03-05 02:23:52.241637489 +0100
+@@ -29,6 +29,49 @@
+ #include "SDL_pixels_c.h"
+ #include "SDL_leaks.h"
+ 
++#include "SDL_surface.h"
++
++/* check bcm accel */
++int bcm_can_accel(SDL_Surface *dst) {
++	int stride, height, bpp;
++	bpp = dst->format->BitsPerPixel;
++	height = dst->h;
++	stride = dst->w * bpp/8;
++	if (((bpp == 8) || (bpp == 16) || (bpp == 32)) && (stride > 48)) {
++		switch (bpp)
++		{
++			case 8:
++				if ((height * stride) > 12000) {
++					break;
++				}
++				else {
++					fprintf(stderr, "FillHWRect is no candidate for accel (height * stride) %d < 12000\n", (height * stride));
++					return(0);
++				}
++			case 16:
++				if ((height * stride) > 32000) {
++					break;
++				}
++				else {
++					fprintf(stderr, "FillHWRect is no candidate for accel (height * stride) %d < 32000\n", (height * stride));
++					return(0);
++				}
++			case 32:
++				if ((height * stride) > 48000) {
++					break;
++				}
++				else {
++					fprintf(stderr, "FillHWRect is no candidate for accel (height * stride) %d < 48000\n", (height * stride));
++					return(0);
++				}
++			default:
++				fprintf(stderr, "FillHWRect is no candidate for accel\n");
++				return(0);
++		}
++		return (1);
++	}
++	return(0);
++}
+ 
+ /* Public routines */
+ /*
+@@ -585,7 +628,7 @@
+ 
+ 	/* Check for hardware acceleration */
+ 	if ( ((dst->flags & SDL_HWSURFACE) == SDL_HWSURFACE) &&
+-					video->info.blit_fill ) {
++					video->info.blit_fill && bcm_can_accel(dst)) {
+ 		SDL_Rect hw_rect;
+ 		if ( dst == SDL_VideoSurface ) {
+ 			hw_rect = *dstrect;
+diff -Nur SDL-1.2.15/src/video/SDL_surface.h SDL-1.2.15.new/src/video/SDL_surface.h
+--- SDL-1.2.15/src/video/SDL_surface.h	1970-01-01 01:00:00.000000000 +0100
++++ SDL-1.2.15.new/src/video/SDL_surface.h	2017-03-05 02:23:52.241637489 +0100
+@@ -0,0 +1,15 @@
++/* bcmfb based SDL video driver implementation.
++*  SDL - Simple DirectMedia Layer
++*  Copyright (C) 1997-2012 Sam Lantinga
++*  
++*  SDL bcmfb backend
++*  Copyright (C) 2016 Emanuel Strobel
++*/
++#include "SDL_config.h"
++
++#ifndef _SDL_surface_h
++#define _SDL_surface_h
++
++extern int bcm_can_accel(SDL_Surface *dst);
++
++#endif /* _SDL_sysvideo_h */
+diff -Nur SDL-1.2.15/src/video/SDL_sysvideo.h SDL-1.2.15.new/src/video/SDL_sysvideo.h
+--- SDL-1.2.15/src/video/SDL_sysvideo.h	2012-01-19 07:30:06.000000000 +0100
++++ SDL-1.2.15.new/src/video/SDL_sysvideo.h	2017-03-05 02:23:52.241637489 +0100
+@@ -341,6 +341,9 @@
+ #if SDL_VIDEO_DRIVER_FBCON
+ extern VideoBootStrap FBCON_bootstrap;
+ #endif
++#if SDL_VIDEO_DRIVER_BCMFB
++extern VideoBootStrap BCMFB_bootstrap;
++#endif
+ #if SDL_VIDEO_DRIVER_DIRECTFB
+ extern VideoBootStrap DirectFB_bootstrap;
+ #endif
+diff -Nur SDL-1.2.15/src/video/SDL_video.c SDL-1.2.15.new/src/video/SDL_video.c
+--- SDL-1.2.15/src/video/SDL_video.c	2012-01-19 07:30:06.000000000 +0100
++++ SDL-1.2.15.new/src/video/SDL_video.c	2017-03-05 02:23:52.241637489 +0100
+@@ -57,6 +57,9 @@
+ #if SDL_VIDEO_DRIVER_FBCON
+ 	&FBCON_bootstrap,
+ #endif
++#if SDL_VIDEO_DRIVER_BCMFB
++	&BCMFB_bootstrap,
++#endif
+ #if SDL_VIDEO_DRIVER_DIRECTFB
+ 	&DirectFB_bootstrap,
+ #endif
