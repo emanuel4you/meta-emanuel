@@ -1,0 +1,20 @@
+--- test/Makefile.in	2017-03-29 15:04:14.720696149 +0200
++++ test/Makefile.in.new	2017-03-29 15:07:32.024697795 +0200
+@@ -51,7 +51,6 @@
+ 	testresample$(EXE) \
+ 	testscale$(EXE) \
+ 	testsem$(EXE) \
+-	testshader$(EXE) \
+ 	testshape$(EXE) \
+ 	testsprite2$(EXE) \
+ 	testspriteminimal$(EXE) \
+@@ -238,9 +237,6 @@
+ testsem$(EXE): $(srcdir)/testsem.c
+ 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+ 
+-testshader$(EXE): $(srcdir)/testshader.c
+-	$(CC) -o $@ $^ $(CFLAGS) $(LIBS) @GLLIB@ @MATHLIB@
+-
+ testshape$(EXE): $(srcdir)/testshape.c
+ 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+ 
