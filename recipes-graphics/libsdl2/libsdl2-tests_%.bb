@@ -12,7 +12,7 @@ LIC_FILES_CHKSUM = "file://../COPYING.txt;md5=e4688d3bd5bf02dadaa3e5182fd9eda9"
 
 BRANCH = "master"
 
-SRCREV = "257369012971bd86b56262851cd2a1bba3a7c7da"
+SRCREV = "8dc7e1520f8d1838bb12b6569e09dcbc8ab61411"
 
 DEPENDS = "libsdl2 \
 	libsdl2-ttf\
@@ -30,9 +30,7 @@ S = "${WORKDIR}/git/test"
 
 inherit autotools-brokensep
 
-
 do_configure_prepend() {
-	sed -i -e 's:SYS_GL_LIBS="-lGL":SYS_GL_LIBS="":g' ${S}/configure.in
 	cd ${S}
 	${S}/autogen.sh
 }
