@@ -6,8 +6,9 @@ SRC_URI = " \
         git://github.com/opendreambox/SDL-mirror.git;protocol=https;branch=${BRANCH} \
         file://linkage.patch \
 "
+#file://dreambox.patch
 
-SRCREV = "${@opendreambox_srcrev('8dc7e1520f8d1838bb12b6569e09dcbc8ab61411', d)}"
+SRCREV = "${@opendreambox_srcrev('cd236013164794cfe86d86f61c34af3996ea0fb2', d)}"
 
 
 inherit opendreambox-srcrev git-project
@@ -18,6 +19,6 @@ PR = "${RECIPE_PR}-dream1"
 
 EXTRA_OECONF += "--enable-video-dreambox \
 "
-LDFLAGS += "-lEGL -lGLESv1_CM -lGLESv2"
+LDFLAGS += "-lEGL -lGLESv2"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/libsdl2:"
