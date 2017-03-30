@@ -90,8 +90,8 @@ diff -Nur SDL-mirror/include/SDL_config.h.in SDL-mirror2-dreambox/include/SDL_co
  #undef SDL_VIDEO_DRIVER_WAYLAND_QT_TOUCH
 diff -Nur SDL-mirror/src/video/dreambox/SDL_dreambox.c SDL-mirror2-dreambox/src/video/dreambox/SDL_dreambox.c
 --- SDL-mirror/src/video/dreambox/SDL_dreambox.c	1970-01-01 01:00:00.000000000 +0100
-+++ SDL-mirror2-dreambox/src/video/dreambox/SDL_dreambox.c	2017-03-30 01:56:11.973022595 +0200
-@@ -0,0 +1,910 @@
++++ SDL-mirror2-dreambox/src/video/dreambox/SDL_dreambox.c	2017-03-30 10:30:23.098384860 +0200
+@@ -0,0 +1,937 @@
 +/*
 +	Simple DirectMedia Layer
 +	Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
@@ -171,7 +171,7 @@ diff -Nur SDL-mirror/src/video/dreambox/SDL_dreambox.c SDL-mirror2-dreambox/src/
 +	
 +	if (fd<0) {
 +#ifdef DREAMBOX_DEBUG
-+		fprintf(stderr, "ERROR: DREAM: set framebuffer resolution failed\n");
++		fprintf(stderr, "ERROR: DREAM: open framebuffer failed\n");
 +#endif
 +		return;
 +	}
@@ -208,6 +208,31 @@ diff -Nur SDL-mirror/src/video/dreambox/SDL_dreambox.c SDL-mirror2-dreambox/src/
 +	}
 +	else
 +		SDL_SetError("DREAM: i/o file /proc/stb/video/videomode");
++}
++
++void 
++DREAM_waitforsync(void)
++{
++	int fd;
++	int c;
++	
++	c = 0;
++	fd = open("/dev/fb0", O_RDWR, 0);
++	
++	if (fd<0) {
++#ifdef DREAMBOX_DEBUG
++		fprintf(stderr, "ERROR: DREAM: open framebuffer failed\n");
++#endif
++		return;
++	}
++	if ( ioctl(fd, FBIO_WAITFORVSYNC, &c) == 0) {
++		
++#ifdef DREAMBOX_DEBUG
++		fprintf(stderr, "DREAM: Wait for Sync\n");
++#endif
++		
++	}
++	close(fd);
 +}
 +
 +static void
@@ -965,6 +990,8 @@ diff -Nur SDL-mirror/src/video/dreambox/SDL_dreambox.c SDL-mirror2-dreambox/src/
 +	/* Wait until OpenGL ES rendering is completed */
 +	eglWaitGL();
 +	
++	DREAM_waitforsync();
++	
 +	eglSwapBuffers(phdata->egl_display, wdata->gles_surface);
 +	return 0;
 +}
@@ -1087,8 +1114,8 @@ diff -Nur SDL-mirror/src/video/dreambox/SDL_dreambox_events.h SDL-mirror2-dreamb
 +/* vi: set ts=4 sw=4 expandtab: */
 diff -Nur SDL-mirror/src/video/dreambox/SDL_dreambox.h SDL-mirror2-dreambox/src/video/dreambox/SDL_dreambox.h
 --- SDL-mirror/src/video/dreambox/SDL_dreambox.h	1970-01-01 01:00:00.000000000 +0100
-+++ SDL-mirror2-dreambox/src/video/dreambox/SDL_dreambox.h	2017-03-30 01:56:19.361022657 +0200
-@@ -0,0 +1,108 @@
++++ SDL-mirror2-dreambox/src/video/dreambox/SDL_dreambox.h	2017-03-30 10:25:32.178382432 +0200
+@@ -0,0 +1,109 @@
 +/*
 +  Simple DirectMedia Layer
 +  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
@@ -1157,6 +1184,7 @@ diff -Nur SDL-mirror/src/video/dreambox/SDL_dreambox.h SDL-mirror2-dreambox/src/
 +/* Display helper functions */
 +void DREAM_setfbresolution(int width, int height);
 +void DREAM_setvideomode(const char *mode);
++void DREAM_waitforsync();
 +
 +/* Display and window functions */
 +int DREAM_videoinit(_THIS);
