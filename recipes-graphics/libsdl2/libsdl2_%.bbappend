@@ -4,10 +4,11 @@ BRANCH = "master"
 
 SRC_URI = " \
         git://github.com/opendreambox/SDL-mirror.git;protocol=https;branch=${BRANCH} \
+        file://dreambox.patch \
         file://linkage.patch \
 "
 
-SRCREV = "${@opendreambox_srcrev('8a60553165db549208dbeb04a14d40f2e36bd401', d)}"
+SRCREV = "${@opendreambox_srcrev('0e80aec4ea6618e9f56f65b73caae66970fa0ad6', d)}"
 
 
 inherit opendreambox-srcrev git-project
