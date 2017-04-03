@@ -12,7 +12,7 @@ LIC_FILES_CHKSUM = "file://../COPYING.txt;md5=e4688d3bd5bf02dadaa3e5182fd9eda9"
 
 BRANCH = "master"
 
-SRCREV = "0e80aec4ea6618e9f56f65b73caae66970fa0ad6"
+SRCREV = "cda806ba6a4fe6626f7fa0d2d7829ebbd0a9e094"
 
 DEPENDS = "libsdl2 \
 	libsdl2-ttf\

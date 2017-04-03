@@ -8,7 +8,7 @@ SRC_URI = " \
         file://linkage.patch \
 "
 
-SRCREV = "${@opendreambox_srcrev('0e80aec4ea6618e9f56f65b73caae66970fa0ad6', d)}"
+SRCREV = "${@opendreambox_srcrev('cda806ba6a4fe6626f7fa0d2d7829ebbd0a9e094', d)}"
 
 
 inherit opendreambox-srcrev git-project
