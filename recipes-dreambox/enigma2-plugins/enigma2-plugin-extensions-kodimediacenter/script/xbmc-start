@@ -1,0 +1,33 @@
+#!/bin/sh
+
+EXE="kodi"
+
+# xbmc skin
+DIALOG=/usr/share/xbmc/addons/skin.estuary/xml/DialogButtonMenu.xml
+
+# gstreamer playercorefactory (video)
+PLAYERCONFIG=/root/.kodi/userdata/playercorefactory.xml
+
+export DISPLAY=0
+export TERM="linux"
+export HOME="/root"
+
+if [ -f ${DIALOG}.original ]; then
+	cp /usr/lib/enigma2/python/Plugins/Extensions/XBMCMediaCenter/DialogButtonMenu.xml.e2 $DIALOG	
+else
+	cp $DIALOG ${DIALOG}.original
+	cp -f /usr/lib/enigma2/python/Plugins/Extensions/XBMCMediaCenter/DialogButtonMenu.xml.e2 $DIALOG
+fi
+
+if [ ! -d /root/.kodi/userdata ]; then
+	mkdir -p /root/.kodi/userdata
+fi
+
+if [ ! -f $PLAYERCONFIG ]; then
+	cp /usr/lib/enigma2/python/Plugins/Extensions/XBMCMediaCenter/playercorefactory.xml.e2 $PLAYERCONFIG
+fi
+
+/usr/bin/${EXE} --standalone
+cp ${DIALOG}.original $DIALOG
+
+exit 0

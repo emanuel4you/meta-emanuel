@@ -1,0 +1,29 @@
+#!/bin/sh
+
+EXE="kodi"
+PLAYERCONFIG=/root/.kodi/userdata/playercorefactory.xml
+
+systemctl stop enigma2
+echo "systemctl stop enigma2..." 
+
+modprobe dreambox_keyboard
+modprobe dreambox_rc2
+modprobe bcm7439
+
+export DISPLAY=0
+export TERM="linux"
+export HOME="/root"
+
+if [ ! -d /root/.kodi/userdata ]; then
+	mkdir -p /root/.kodi/userdata
+fi
+
+if [ ! -f $PLAYERCONFIG ]; then
+	cp /usr/lib/enigma2/python/Plugins/Extensions/XBMCMediaCenter/playercorefactory.xml.e2 $PLAYERCONFIG
+fi
+
+/usr/bin/${EXE} --standalone
+
+systemctl start enigma2
+
+exit 0

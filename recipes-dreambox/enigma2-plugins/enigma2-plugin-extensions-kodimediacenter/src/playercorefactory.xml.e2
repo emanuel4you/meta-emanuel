@@ -1,0 +1,24 @@
+<playercorefactory>
+ <players>
+   <player name="gstreamer" type="ExternalPlayer" audio="false" video="true">
+     <filename>gstreamer</filename>
+     <args>"{1}"</args>
+     <hidexbmc>true</hidexbmc>
+     <playonestackitem>true</playonestackitem>
+   </player>
+ </players>
+ <rules action="prepend">
+  <rule filetypes="mkv" player="gstreamer"/>
+  <rule filetypes="ts" player="gstreamer"/>
+  <rule filetypes="avi" player="gstreamer"/>
+  <rule filetypes="mov" player="gstreamer"/>
+  <rule filetypes="mpeg" player="gstreamer"/>
+  <rule filetypes="mpg" player="gstreamer"/>
+  <rule filetypes="mp4" player="gstreamer"/>
+  <rule filetypes="divx" player="gstreamer"/>
+  <rule filetypes="vob" player="gstreamer"/>
+  <rule filetypes="flv" player="gstreamer"/>
+  <rule filetypes="yuv" player="gstreamer"/>
+  <rule filetypes="webm" player="gstreamer"/>
+ </rules>
+</playercorefactory>

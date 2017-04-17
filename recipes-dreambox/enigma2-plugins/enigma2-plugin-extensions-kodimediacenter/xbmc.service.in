@@ -1,0 +1,10 @@
+[Unit]
+Description=Start a script
+After=syslog.target network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/start-xbmc-standalone
+
+[Install]
+WantedBy=multi-user.target
